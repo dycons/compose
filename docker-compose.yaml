@@ -7,4 +7,9 @@ services:
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: admin
     ports:
-      - 8080:8080
+      - "8080:8080"
+  keycloak-vue:
+    build:
+      context: services/sample-vue/app-vue/
+    ports:
+      - "3000:3000"
