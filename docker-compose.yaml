@@ -2,7 +2,7 @@ version: "3.7"
 services:
   keycloak:
     build:
-      context: services/keycloak/
+      context: ${PARTICIPANT_PORTAL_KEYCLOAK_DIR}
     environment:
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: admin
@@ -10,6 +10,6 @@ services:
       - "8080:8080"
   keycloak-vue:
     build:
-      context: services/sample-vue/app-vue/
+      context: ${PARTICIPANT_PORTAL_FE_DIR}
     ports:
       - "3000:3000"
