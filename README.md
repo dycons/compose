@@ -10,7 +10,7 @@ DyCons server configuration and deployment
    1. Navigate to http://127.0.0.1:8080/auth/admin.
    2. Login using the username and password: `admin` / `admin`
    3. Add the test **Realm** by hovering over the "Master" label in the top left, and click "Add realm".
-   4. Click "Select File" and choose the preconfigured realm at `/services/keycloak/realm-export.json`. The name should be autofilled with `dycons`.
+   4. Click "Select File" and choose the preconfigured realm at `../participant-portal/keycloak/realm-export.json`. The name should be autofilled with `dycons`.
    5. Click "Save" to finish.
 3. **Add test User**:
    1. Navigate to the "Users" menu via the navbar on the left
