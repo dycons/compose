@@ -45,7 +45,7 @@ git clone https://github.com/CSCfi/rems.git ../rems
    2. Run `lein uberjar` in the `rems` directory to build the rems jar locally.
    3. Run `docker-compose build rems` from the `compose` directory to build the dockerfile, which will package the jar you just built.
    4. Run `docker-compose run --rm -e CMD="migrate;test-data" rems` to prepare the database, migrate the required tables, and set up seed data.
-   5. REMs should now be ready for use.
+   5. REMS should now be ready for use.
 2. Boot up the researcher keycloak instance by running `docker-compose up rp-keycloak`
 3. **Add test Realm:**
    1. Access the Researcher IdP at http://localhost:3002/auth/admin
@@ -62,8 +62,10 @@ git clone https://github.com/CSCfi/rems.git ../rems
 5. **Expose Keycloak to REMS**:
    * **Note:** Because REMS only permits HTTPS connections to OIDC (ticket available here), it is necessary to use a localhost tunnelling service like https://ngrok.com/
    1. Use your tunneling service to expose the keycloak service (`localhost:3002`), and acquire a useable `https` address. ngrok example: enter `ngrok http 3002` into your terminal, then copy the address following `https://` specified in the second `Forwarding` section.
-   2. Open `compose/services/rems/simple-config.edn` and modify the `:oidc-domain` params to use the host from step 1, by replacing the `[HOST]` string with the HTTPS domain acquired above. Remember to only enter the domain name following `https://`, leaving out the `https://` segment.
-   3. Boot up REMS by running `docker-compose up rems` in the `compose` directory.
+   2. Open `compose/services/rems/simple-config.edn` and modify the `:oidc-domain` param to use the host from step 1, by replacing the `[HOST]` string with the HTTPS domain acquired above. Remember to only enter the domain name following `https://`, leaving out the `https://` segment.
+   3. In the Researcher IdP keycloak at http://localhost:3002/auth/admin, navigate to *Clients* (on the left side of the screen) > `researcher-portal-client` > *Credentials* and click `Regenerate Secret`. Copy the generated secret, ex. `be9d769d-a166-428c-b442-5ff703cb0a78`.
+   4. Back in `compose/services/rems/simple-config.edn`, modify the `:oidc-client-secret` param to use the secret generated in step 3.
+   5. Boot up REMS by running `docker-compose up rems` in the `compose` directory.
 6. **Testing**
    1. Navigate to REMS at http://localhost:3001/.
    2. Click on the "Login" button to be redirected to your keycloak instance.

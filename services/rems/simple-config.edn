@@ -8,5 +8,6 @@
 ; EXAMPLE: :oidc-domain "985ae5935770.ngrok.io/auth/realms/dycons-researcher-idp"
 
  :oidc-client-id "researcher-portal-client"
- :oidc-client-secret "fb2454c3-9b2d-4a54-b093-c0dc53599343"
+ :oidc-client-secret "[SECRET]"
+; EXAMPLE: :oidc-client-secret "be9d769d-a166-428c-b442-5ff703cb0a78"
 }
