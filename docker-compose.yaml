@@ -4,8 +4,8 @@ services:
     build:
       context: ${PARTICIPANT_PORTAL_KEYCLOAK_DIR}
     environment:
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_USER: ${KEYCLOAK_USER}
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
     ports:
       - "8080:8080"
   keycloak-vue:
