@@ -10,7 +10,6 @@ services:
       - "8080:8080"
     depends_on:
       - pp-keycloak-vue
-      - pp-react
   pp-keycloak-vue:
     build:
       context: ${PARTICIPANT_PORTAL_FE_DIR}
