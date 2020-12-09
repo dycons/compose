@@ -17,11 +17,11 @@ services:
       - "3000:3000"
   pp-react:
     build:
-      context: ../participant-portal/participant-portal-react
+      context: ${PARTICIPANT_PORTAL_REACT_DIR}
     ports:
       - "3003:3000"
     volumes:
-      - ../participant-portal/participant-portal-react:/app
+      - ${PARTICIPANT_PORTAL_REACT_DIR}:/app
       - /node_modules
   rems:
     build:
