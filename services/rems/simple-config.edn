@@ -1,0 +1,13 @@
+{:port 3000
+ :database-url "postgresql://db:5432/rems?user=rems&password=remspassword"
+ :search-index-path "/tmp/rems-search-index"
+ :authentication :oidc
+ :public-url "http://localhost:3001/"
+
+ :oidc-domain "[HOST]/auth/realms/dycons-researcher-idp"
+; EXAMPLE: :oidc-domain "985ae5935770.ngrok.io/auth/realms/dycons-researcher-idp"
+
+ :oidc-client-id "researcher-portal-client"
+ :oidc-client-secret "[SECRET]"
+; EXAMPLE: :oidc-client-secret "be9d769d-a166-428c-b442-5ff703cb0a78"
+}

@@ -1,0 +1,183 @@
+;; This file contains the default values of all config options supported by REMS.
+;; Details of the the config options are also documented here.
+;; REMS will log a warning if you use a config option not listed in this file.
+;; See docs/configuration.md for more info.
+
+{;; HTTP server port.
+ :port 3000
+
+ ;; Url for this REMS installation. Should end with a /.
+ ;; Used for generating links in emails, in OpenId authentication (:oidc),
+ ;; and in the `iss` and `source` of generated GA4GH visas (see /api/permissions).
+ :public-url nil
+
+ ;; When :nrepl-port is set, the application starts an nREPL server on load.
+ :nrepl-port nil
+
+ ;; When true, enables experimental and unfinished features.
+ :dev false
+
+ ;; Uses :database-url if it's defined. Otherwise :database-jndi-name is used.
+ :database-url nil
+ :database-jndi-name "java:comp/env/jdbc/rems"
+
+ ;; Value for PostgreSQL lock_timeout
+ :database-lock-timeout "10s"
+ ;; Value for PostgreSQL idle_in_transaction_session_timeout
+ :database-idle-in-transaction-session-timeout "20s"
+
+ ;; Path to a writable directory where to store the Lucene search index files.
+ :search-index-path "search-index"
+
+ ;; Supported authentication methods: :oidc, :fake
+ :authentication :fake
+
+ ;; Log additional details about authentication
+ :log-authentication-details false
+
+ ;; Show link to an alternative login service
+ :alternative-login-url nil
+
+ ;; For :oidc authentication
+ :oidc-domain nil
+ :oidc-client-id nil
+ :oidc-client-secret nil
+ ;; Which scopes to pass to the authorization endpoint
+ :oidc-scopes "openid profile email"
+ ;; Which id-token attribute to use as the rems userid
+ :oidc-userid-attribute "sub"
+ ;; Additional query parameters to add to the OIDC authorization_endpoint url when logging in
+ ;; Example:
+ ;;   :oidc-additional-authorization-parameters "&acr_values=foo&ui_locales=sv"
+ :oidc-additional-authorization-parameters nil
+ ;; List of additional attributes to read from OIDC claims. Each attribute can have keys:
+ ;;   :attribute (mandatory) - the name of the attribute as in the OIDC claim, a string
+ ;;   :name (optional) - a map with languages as keys and the localized name for the attribute as values
+ ;;
+ ;; Example:
+ ;;
+ ;;   :oidc-extra-attributes [{:attribute "groups"
+ ;;                            :name {:en "Groups" :fi "Ryhmät"}}
+ ;;                           {:attribute "employeeNumber"}]
+ :oidc-extra-attributes []
+
+ ;; Sending email.
+ :smtp-host nil
+ :smtp-port 25
+ :mail-from nil
+ :email-retry-period "P3D" ;; in ISO 8601 duration format https://en.wikipedia.org/wiki/ISO_8601#Durations
+
+ ;; URLs to notify about granted and revoked entitlements.
+ :entitlements-target {:add nil
+                       :remove nil
+                       :ga4gh nil} ;; Url where entitlements are pushed in ga4gh format, see https://github.com/ga4gh-duri/ga4gh-duri.github.io/
+
+ ;; Default length for entitlements, in days. This only affects the UI of the approve command.
+ ;; The default, nil, means indefinite entitlements.
+ :entitlement-default-length-days nil
+
+ ;; URLs to notify about new events. An array of targets. Targets can have keys:
+ ;;   :url (mandatory) - the url to send HTTP PUT requests to
+ ;;   :event-types (optional) - an array of event types to send. A missing value means "send everything".
+ ;;   :timeout (optional) - timeout for the PUT in seconds. Defaults to 60s.
+ ;;   :headers (optional) - a map of additional HTTP headers to send.
+ ;;
+ ;; See also: docs/event-notification.md
+ ;;
+ ;; Example:
+ ;;
+ ;; :event-notification-targets [{:url "http://events/everything"}
+ ;;                              {:url "http://events/filtered"
+ ;;                               :event-types [:application.event/created :application.event/submitted]
+ ;;                               :timeout 120
+ ;;                               :headers {"Authorization" "abc123"
+ ;;                                         "X-Header" "value"}}]
+ :event-notification-targets []
+
+ ;; Which database column to show as the application id.
+ ;; Options: :id, :external-id
+ :application-id-column :external-id
+
+ ;; List of supported languages. They will be selectable in the UI.
+ :languages [:en :fi]
+ :default-language :en
+
+ ;; Path to a directory with translations for additional languages.
+ :translations-directory "translations/"
+
+ ;; Path to an external theme file to override variables in :theme.
+ ;; Will automatically set :theme-static-resources to a 'public' directory
+ ;; next to the theme file.
+ :theme-path nil
+
+ ;; Optional static resources directory for theme files.
+ :theme-static-resources nil
+
+ ;; UI theme variables.
+ :theme {:color1 "#eee"
+         :color2 "#555"
+         :color3 "#000"
+         :color4 "#000"}
+
+ ;; Optional extra static resources directory.
+ :extra-static-resources nil
+
+ ;; Optional extra script files loaded when UI loads
+ :extra-scripts {:root "/dev/null" :files []}
+
+ ;; Optional extra pages shown in the navigation bar.
+ ;;
+ ;; Example: define two pages
+ ;;
+ ;; :extra-pages [;; This is a page that's hosted at an external URL
+ ;;               {:id "hello"
+ ;;                :url "http://example.org/hello.html"
+ ;;                :translations {:fi {:title "Hei"}
+ ;;                               :en {:title "Hello"}}}
+ ;;               ;; This is a page that's a markdown file, localized into two languages.
+ ;;               ;; The files are searched under :extra-pages-path (see below).
+ ;;               {:id "about"
+ ;;                :translations {:fi {:title "Info"
+ ;;                                    :file "about-fi.md"}
+ ;;                               :en {:title "About"
+ ;;                                    :file "about-en.md"}}}]
+ :extra-pages []
+
+ ;; Path to the markdown files for the extra pages.
+ :extra-pages-path nil
+
+ ;; The character used as the separator in csv files.
+ :csv-separator ","
+
+ ;; Optional, the number of days until the deadline for making a decision
+ ;; on an application, starting from the first submission.
+ :application-deadline-days nil
+
+ ;; List of commands to disable. See the swagger model of
+ ;; /api/applications/{application-id} field application/permissions
+ ;; for all possible values.
+ ;;
+ ;; Example:
+ ;; :disable-commands [:application.command/assign-external-id :application.command/change-resources]
+ :disable-commands []
+
+ ;; Experimental features
+
+ ;; enable /api/applications/:id/experimental/pdf
+ :enable-pdf-api false
+
+ ;; enable /api/permissions/:user
+ ;; see also docs/ga4gh-visas.md
+ :enable-permissions-api false
+ ;; Keys for signing GA4GH Visas produced by permissions api.
+ ;; Format: path to file containing key in JWK (Json Web Key) format
+ :ga4gh-visa-private-key nil
+ :ga4gh-visa-public-key nil
+
+ ;; Should the catalogue be public and visible to everyone, i.e. also to not logged-in users.
+ :catalogue-is-public false
+
+ ;; Options used only for development
+ :render-css-file? false
+ :test-database-url nil
+ :accessibility-report false} ; should the axe accessibility tooling be included?
