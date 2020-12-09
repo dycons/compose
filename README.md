@@ -17,14 +17,13 @@ git clone https://github.com/CSCfi/rems.git ../rems
 
 **TODO** - Turn the following setup process into an automated step on startup.
 
-## Participant Portal
-
-1. First make sure the keycloak services is running via `docker-compose up pp-keycloak` .
+## Participant Portal + Participant IdP
+1. First make sure the keycloak service is running via `docker-compose up pp-keycloak`
 2. **Add test Realm:**
    1. Navigate to http://127.0.0.1:8080/auth/admin.
    2. Login using the username and password: `admin` / `admin`
    3. Add the test **Realm** by hovering over the "Master" label in the top left, and click "Add realm".
-   4. Click "Select File" and choose the preconfigured realm at `[PARTICIPANT-PORTAL-DIRECTORY]/keycloak/realm-export.json`. The name should be autofilled with `dycons-participant-idp`.
+   4. Click "Select File" and choose the preconfigured realm at `../participant-portal/keycloak/realm-export.json`. The name should be autofilled with `dycons-participant-idp`.
    5. Click "Save" to finish.
 3. **Add test User**:
    1. Navigate to the "Users" menu via the navbar on the left
@@ -42,7 +41,22 @@ git clone https://github.com/CSCfi/rems.git ../rems
       2. Run `yarn start` to compile the app.
       3. Continue development on your machine - changes will be mapped to the volume inside the container and reflected at http://127.0.0.1:3002
 
-## Researcher Portal
+## Researcher IdP
+1. First make sure the services are running via `docker-compose up rp-keycloak`
+2. **Add test Realm:**
+   1. Navigate to http://127.0.0.1:8080/auth/admin.
+   2. Login using the username and password: `admin` / `admin`
+   3. Add the test **Realm** by hovering over the "Master" label in the top left, and click "Add realm".
+   4. Click "Select File" and choose the preconfigured realm at `../researcher-portal/keycloak/realm-export.json`. The name should be autofilled with `dycons-researcher-idp`.
+   5. Click "Save" to finish.
+3. **Add test User**:
+   1. Navigate to the "Users" menu via the navbar on the left
+   2. Click "Add User" on the right side of the page
+   3. Set the username to `varchar` and click "Save".
+   4. On the next page, click the "Credentials" tab
+   5. Enter `varchar` in both password fields, toggle `Temporary` *off*, and click "Set Password"
+
+## REMS + Researcher IdP
 
 1. **Prepare REMS**:
    * **Note**: due to limitations in REMS' repository and docker setup, it is currently necessary to build the rems jar locally. Additional reading is available [here](https://github.com/CSCfi/rems/blob/master/docs/installing-upgrading.md#option-2-build-rems-image-locally).
@@ -57,7 +71,7 @@ git clone https://github.com/CSCfi/rems.git ../rems
    1. Access the Researcher IdP at http://localhost:3002/auth/admin
    2. Login using the username and password: `admin` / `admin`
    3. Add the test *Realm* by hovering over the "Master" label in the top left and click "Add realm".
-   4. Click "Select File" and choose the preconfigured realm at `[RESEARCHER-PORTAL-DIRECTORY]/keycloak/realm-export.json`. The name should be autofilled with `dycons-researcher-idp`.
+   4. Click "Select File" and choose the preconfigured realm at `../researcher-portal/keycloak/realm-export.json`. The name should be autofilled with `dycons-researcher-idp`.
    5. Click "Save" to finish.
 4. **Add test User**:
    1. Navigate to the "Users" menu via the navbar on the left
