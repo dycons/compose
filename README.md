@@ -38,9 +38,9 @@ git clone https://github.com/CSCfi/rems.git ../rems
    3. Click on the "Login" button and you should be redirected to the Keycloak login screen.
    4. Access the account using `varchar`/`varchar`. You'll be redirected back to the React frontend with the user's JWT token and email displayed.
    5. ** For active development **
-      1. Instead of step 1, run: `dodocker-compose run --rm --entrypoint sh --service-port pp-react`. This will log you into the application.
+      1. Instead of step 1, run: `docker-compose run --rm --entrypoint sh --service-port pp-react`. This will log you into the application.
       2. Run `yarn start` to compile the app.
-      3. Continue development on your machine - changes will be mapped to the volume inside the container and reflected at 127.0.0.1:3002
+      3. Continue development on your machine - changes will be mapped to the volume inside the container and reflected at http://127.0.0.1:3002
 
 ## Researcher Portal
 
