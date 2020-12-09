@@ -17,14 +17,13 @@ git clone https://github.com/CSCfi/rems.git ../rems
 
 **TODO** - Turn the following setup process into an automated step on startup.
 
-## Participant IdP
-
-1. First make sure the services are running via `docker-compose up pp-keycloak`
+## Participant Portal + Participant IdP
+1. First make sure the keycloak service is running via `docker-compose up pp-keycloak`
 2. **Add test Realm:**
    1. Navigate to http://127.0.0.1:8080/auth/admin.
    2. Login using the username and password: `admin` / `admin`
    3. Add the test **Realm** by hovering over the "Master" label in the top left, and click "Add realm".
-   4. Click "Select File" and choose the preconfigured realm at `../participant-portal/keycloak/realm-export.json`. The name should be autofilled with `dycons`.
+   4. Click "Select File" and choose the preconfigured realm at `../participant-portal/keycloak/realm-export.json`. The name should be autofilled with `dycons-participant-idp`.
    5. Click "Save" to finish.
 3. **Add test User**:
    1. Navigate to the "Users" menu via the navbar on the left
@@ -33,8 +32,14 @@ git clone https://github.com/CSCfi/rems.git ../rems
    4. On the next page, click the "Credentials" tab
    5. Enter `varchar` in both password fields, toggle `Temporary` *off*, and click "Set Password"
 4. **Testing** - Now it's time to test our setup by using the bundled front end:
-   1. Start by going to http://127.0.0.1:3000/. You should be automatically redirected to the Keycloak login screen.
-   2. Access the account using `varchar`/`varchar`. You'll be redirected back to the Vue front end with the user's JWT token.
+   1. Boot up the React frontend by running `docker-compose up pp-react`
+   2. Start by going to http://127.0.0.1:3003/.
+   3. Click on the "Login" button and you should be redirected to the Keycloak login screen.
+   4. Access the account using `varchar`/`varchar`. You'll be redirected back to the React frontend with the user's JWT token and email displayed.
+   5. ** For active development **
+      1. Instead of step 1, run: `docker-compose run --rm --entrypoint sh --service-port pp-react`. This will log you into the application.
+      2. Run `yarn start` to compile the app.
+      3. Continue development on your machine - changes will be mapped to the volume inside the container and reflected at http://127.0.0.1:3002
 
 ## Researcher IdP
 1. First make sure the services are running via `docker-compose up rp-keycloak`

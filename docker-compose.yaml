@@ -8,11 +8,14 @@ services:
       KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
     ports:
       - "8080:8080"
-  pp-keycloak-vue:
+  pp-react:
     build:
-      context: ${PARTICIPANT_PORTAL_FE_DIR}
+      context: ${PARTICIPANT_PORTAL_REACT_DIR}
     ports:
-      - "3000:3000"
+      - "3003:3000"
+    volumes:
+      - ${PARTICIPANT_PORTAL_REACT_DIR}:/app
+      - /node_modules
   rems:
     build:
       context: ${REMS_DIR}
