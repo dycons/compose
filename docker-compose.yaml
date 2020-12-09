@@ -8,11 +8,6 @@ services:
       KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
     ports:
       - "8080:8080"
-  pp-keycloak-vue:
-    build:
-      context: ${PARTICIPANT_PORTAL_FE_DIR}
-    ports:
-      - "3000:3000"
   pp-react:
     build:
       context: ${PARTICIPANT_PORTAL_REACT_DIR}
