@@ -44,7 +44,7 @@ git clone https://github.com/CSCfi/rems.git ../rems
 ## Researcher IdP
 1. First make sure the services are running via `docker-compose up rp-keycloak`
 2. **Add test Realm:**
-   1. Navigate to http://127.0.0.1:8080/auth/admin.
+   1. Navigate to http://127.0.0.1:3002/auth/admin.
    2. Login using the username and password: `admin` / `admin`
    3. Add the test **Realm** by hovering over the "Master" label in the top left, and click "Add realm".
    4. Click "Select File" and choose the preconfigured realm at `../researcher-portal/keycloak/realm-export.json`. The name should be autofilled with `dycons-researcher-idp`.
