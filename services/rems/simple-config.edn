@@ -4,10 +4,9 @@
  :authentication :oidc
  :public-url "http://localhost:3001/"
 
- :oidc-domain "[HOST]/auth/realms/dycons-researcher-idp"
-; EXAMPLE: :oidc-domain "985ae5935770.ngrok.io/auth/realms/dycons-researcher-idp"
+ :oidc-metadata-url "http://rp-keycloak:8080/auth/realms/dycons-researcher-idp"
 
  :oidc-client-id "researcher-portal-client"
- :oidc-client-secret "[SECRET]"
+ :oidc-client-secret "def86f63-5971-45ab-bab0-b98d853f67c3"
 ; EXAMPLE: :oidc-client-secret "be9d769d-a166-428c-b442-5ff703cb0a78"
 }
