@@ -4,7 +4,7 @@
  :authentication :oidc
  :public-url "http://localhost:3001/"
 
- :oidc-metadata-url "http://rp-keycloak:8080/auth/realms/dycons-researcher-idp"
+ :oidc-metadata-url "http://rp-keycloak:8080/auth/realms/dycons-researcher-idp/.well-known/openid-configuration"
 
  :oidc-client-id "researcher-portal-client"
  :oidc-client-secret "def86f63-5971-45ab-bab0-b98d853f67c3"
