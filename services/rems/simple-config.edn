@@ -6,7 +6,7 @@
 
  :oidc-metadata-url "http://rp-keycloak:8080/auth/realms/dycons-researcher-idp/.well-known/openid-configuration"
 
- :oidc-client-id "researcher-portal-client"
- :oidc-client-secret "def86f63-5971-45ab-bab0-b98d853f67c3"
+ :oidc-client-id "rems-client"
+ :oidc-client-secret "0ed4b9e0-5ff0-446a-ab7b-82dac465b9d5"
 ; EXAMPLE: :oidc-client-secret "be9d769d-a166-428c-b442-5ff703cb0a78"
 }
