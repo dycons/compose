@@ -15,7 +15,7 @@ services:
       - "3003:3000"
     volumes:
       - ${PARTICIPANT_PORTAL_REACT_DIR}:/app
-      - /node_modules
+      - /app/node_modules
   rems:
     build:
       context: ${REMS_DIR}
@@ -45,3 +45,11 @@ services:
       KEYCLOAK_PASSWORD: admin
     ports:
       - "3002:8080"
+  rp-react:
+    build:
+      context: ${RESEARCHER_PORTAL_REACT_DIR}
+    ports:
+      - "3004:3000"
+    volumes:
+      - ${RESEARCHER_PORTAL_REACT_DIR}:/app
+      - /app/node_modules
