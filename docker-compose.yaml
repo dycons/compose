@@ -1,4 +1,7 @@
 version: "3.7"
+volumes:
+  katsu-db-data:
+
 services:
   pp-keycloak:
     build:
@@ -53,3 +56,28 @@ services:
     volumes:
       - ${RESEARCHER_PORTAL_REACT_DIR}:/app
       - /app/node_modules
+  db-katsu:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ${KATSU_POSTGRES_DB}
+      POSTGRES_USER: ${KATSU_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${KATSU_POSTGRES_PASSWORD}
+    ports:
+      - "5432"
+    volumes:
+      - katsu-db-data:/var/lib/postgresql/data
+  katsu:
+    image: candig/chord-metadata:v1.0.0
+    volumes:
+      - ./services/katsu/katsu_entrypoint.sh:/app/katsu_entrypoint.sh
+    entrypoint: ["/app/katsu_entrypoint.sh"]
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db-katsu
+    environment:
+      POSTGRES_HOST: "db-katsu"
+      POSTGRES_PORT: 5432
+      POSTGRES_DATABASE: ${KATSU_POSTGRES_DB}
+      POSTGRES_USER: ${KATSU_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${KATSU_POSTGRES_PASSWORD}
