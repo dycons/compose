@@ -42,7 +42,7 @@ git clone https://github.com/CSCfi/rems.git ../rems
       3. Continue development on your machine - changes will be mapped to the volume inside the container and reflected at http://127.0.0.1:3002
 
 ## Researcher Portal + Researcher IdP
-1. First make sure the services are running via `docker-compose up rp-keycloak`
+1. First make sure the services are running via `docker-compose up rp-keycloak katsu`.
 2. **Add test Realm:**
    1. Navigate to http://127.0.0.1:3002/auth/admin.
    2. Login using the username and password: `admin` / `admin`
@@ -59,8 +59,7 @@ git clone https://github.com/CSCfi/rems.git ../rems
    1. Boot up the React frontend by running `docker-compose up rp-react`.
    2. Start by going to http://127.0.0.1:3004/.
    3. Click on the "Log In" button and you should be redirected to the Keycloak login screen.
-   4. Access the account using `varchar`/`varchar`. You'll be redirected back to the React frontend with the user's username, email and JWT token 
-   displayed.
+   4. Access the account using `varchar`/`varchar`. You'll be redirected back to the React frontend.
    5. ** For active development **
       1. Instead of step 1, run: `docker-compose run --rm --entrypoint sh --service-port rp-react`. This will log you into the application.
       2. Run `npm start` to compile the app.
