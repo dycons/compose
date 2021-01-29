@@ -41,7 +41,7 @@ git clone https://github.com/CSCfi/rems.git ../rems
       2. Run `yarn start` to compile the app.
       3. Continue development on your machine - changes will be mapped to the volume inside the container and reflected at http://127.0.0.1:3002
 
-## Researcher Portal + Researcher IdP
+## Researcher Portal + Researcher IdP + Katsu
 1. First make sure the services are running via `docker-compose up rp-keycloak katsu`.
 2. **Add test Realm:**
    1. Navigate to http://127.0.0.1:3002/auth/admin.
