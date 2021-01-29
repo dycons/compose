@@ -1,6 +1,14 @@
 # compose
 DyCons server configuration and deployment
 
+## Table of Contents
+- [compose](#compose)
+  - [Table of Contents](#table-of-contents)
+  - [Setting up Keycloak for testing:](#setting-up-keycloak-for-testing)
+  - [Participant Portal + Participant IdP](#participant-portal--participant-idp)
+  - [Researcher Portal + Researcher IdP](#researcher-portal--researcher-idp)
+  - [REMS + Researcher IdP](#rems--researcher-idp)
+
 ## Setting up Keycloak for testing:
 
 Setup expects the following reposto be available on the development/test machine:
