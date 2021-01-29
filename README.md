@@ -67,7 +67,7 @@ git clone https://github.com/CSCfi/rems.git ../rems
    1. Boot up the React frontend by running `docker-compose up rp-react`.
    2. Start by going to http://127.0.0.1:3004/.
    3. Click on the "Log In" button and you should be redirected to the Keycloak login screen.
-   4. Access the account using `varchar`/`varchar`. You'll be redirected back to the React frontend with the user's username, email and JWT token
+   4. Access the account using `varchar`/`varchar`. You'll be redirected back to the React frontend with the user's username, email and JWT token 
    displayed.
    5. ** For active development **
       1. Instead of step 1, run: `docker-compose run --rm --entrypoint sh --service-port rp-react`. This will log you into the application.
