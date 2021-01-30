@@ -4,6 +4,7 @@ volumes:
 
 services:
   pp-keycloak:
+    image: dycons.pp-keycloak
     build:
       context: ${PARTICIPANT_PORTAL_KEYCLOAK_DIR}
     environment:
@@ -12,6 +13,7 @@ services:
     ports:
       - "8080:8080"
   pp-react:
+    image: dycons.pp-react
     build:
       context: ${PARTICIPANT_PORTAL_REACT_DIR}
     ports:
@@ -19,7 +21,10 @@ services:
     volumes:
       - ${PARTICIPANT_PORTAL_REACT_DIR}:/app
       - /app/node_modules
+    depends_on:
+      - pp-keycloak
   rems:
+    image: dycons.rems
     build:
       context: ${REMS_DIR}
       dockerfile: Dockerfile
@@ -41,6 +46,7 @@ services:
     ports:
       - "127.0.0.1:5432:5432"
   rp-keycloak:
+    image: dycons.rp-keycloak
     build:
       context: ${RESEARCHER_PORTAL_KEYCLOAK_DIR}
     environment:
@@ -49,6 +55,7 @@ services:
     ports:
       - "3002:8080"
   rp-react:
+    image: dycons.rp-react
     build:
       context: ${RESEARCHER_PORTAL_REACT_DIR}
     ports:
