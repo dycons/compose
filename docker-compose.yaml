@@ -68,8 +68,11 @@ services:
       - katsu-db-data:/var/lib/postgresql/data
   katsu:
     image: candig/chord-metadata:v1.3.0
+    container_name: katsu
     volumes:
       - ./services/katsu/katsu_entrypoint.sh:/app/katsu_entrypoint.sh
+      - ./services/katsu/ingest.conf.json:/app/chord_metadata_service/scripts/ingest.conf.json
+      - ./services/katsu/cancogen_phenopackets.json:/app/cancogen_phenopackets.json
     entrypoint: ["/app/katsu_entrypoint.sh"]
     ports:
       - "8000:8000"
