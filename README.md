@@ -15,6 +15,7 @@ Setup expects the following reposto be available on the development/test machine
 - [participant-portal](https://github.com/dycons/participant-portal)
 - [researcher-portal](https://github.com/dycons/researcher-portal)
 - [rems](https://github.com/CSCfi/rems)
+- [consents](https://github.com/dycons/consents)
 
 To set these up at the paths specified in this repo's `.env` file, you could run the following snippet:
 ```
@@ -105,3 +106,8 @@ git clone https://github.com/CSCfi/rems.git ../rems
    1. Navigate to REMS at http://localhost:3001/.
    2. Click on the "Login" button to be redirected to your keycloak instance.
    3. Access the account using `varchar`/`varchar`. You should be authenticated and redirected back to REMS.
+
+## Consents
+1. **Run** the Consents service with `docker-compose up consents`
+2. **Migrate** the Consents service with `./migrations/migrate.sh -s consents`
+3. (Optional) **Test** the Consents service by running requests from the [Postman collection and test data](https://github.com/dycons/consents/tree/develop/tests).
