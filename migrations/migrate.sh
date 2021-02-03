@@ -63,7 +63,7 @@ case $service in
         soda migrate up -c ./database.yml -e development -p consents-service/data/migrations'
         ;;
     rems)
-        docker-compose run --rm -e CMD="migrate;test-data" rems
+        docker-compose run --rm -e CMD="migrate" rems
         ;;
     *)
         echo "I do not know how to migrate this service. Exiting."

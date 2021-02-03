@@ -83,8 +83,9 @@ git clone https://github.com/CSCfi/rems.git ../rems
    1. Install [Leiningen](https://leiningen.org/). Use the official instructions, or your preferred [package manager](https://github.com/technomancy/leiningen/wiki/Packaging) (for example, `brew install leiningen` or `apt-get install leiningen`)
    2. Run `lein uberjar` in the `rems` directory to build the rems jar locally.
    3. Run `docker-compose build rems` from the `compose` directory to build the dockerfile, which will package the jar you just built.
-   4. Run `docker-compose run --rm -e CMD="migrate;test-data" rems` to prepare the database, migrate the required tables, and set up seed data.
-   5. REMS should now be ready for use.
+   4. Run `./migrations/migrate.sh -s rems` to prepare the database and migrate the required tables.
+   5. (Optional) Run `docker-compose run --rm -e CMD="test-data" rems` to populate REMS with test data.
+   6. REMS should now be ready for use.
 2. Boot up the researcher keycloak instance by running `docker-compose up rp-keycloak`
 3. **Add test Realm:**
    1. Access the Researcher IdP at http://localhost:3002/auth/admin
