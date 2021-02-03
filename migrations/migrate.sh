@@ -37,8 +37,8 @@ while getopts ":hf:s:" opt; do
         ;;
     f)  composefile="$OPTARG"
         ;;
-	s)  service="$OPTARG"
-		;;
+	  s)  service="$OPTARG"
+		    ;;
     \?) echo "Invalid option -$OPTARG" >&2
         ;;
   esac
@@ -54,7 +54,6 @@ done
 echo "composefile: " $composefile
 echo "service: " $service
 
-
 case $service in
     consents)
         docker-compose -f $composefile exec $service sh -c \
@@ -62,6 +61,9 @@ case $service in
         do sleep 1; \
         done &&\
         soda migrate up -c ./database.yml -e development -p consents-service/data/migrations'
+        ;;
+    rems)
+        docker-compose run --rm -e CMD="migrate;test-data" rems
         ;;
     *)
         echo "I do not know how to migrate this service. Exiting."
