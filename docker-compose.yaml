@@ -81,3 +81,13 @@ services:
       POSTGRES_DATABASE: ${KATSU_POSTGRES_DB}
       POSTGRES_USER: ${KATSU_POSTGRES_USER}
       POSTGRES_PASSWORD: ${KATSU_POSTGRES_PASSWORD}
+  relay:
+    build:
+      context: ${RELAY_DIR}
+      target: builder
+    ports:
+      - 3006:3000
+    volumes:
+      - ${RELAY_DIR}:/build
+      - /build/bin/
+    entrypoint: ["sh", "./init.sh"]
