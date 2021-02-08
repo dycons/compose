@@ -62,13 +62,11 @@ services:
     volumes:
       - rems-db-data:/var/lib/postgresql/data
   rems:
-    build:
-      context: ${REMS_DIR}
-      dockerfile: Dockerfile
+    image: cscfi/rems
     mem_reservation: 200m
     mem_limit: 500m
     ports:
-      - "3001:3001"
+      - "3001:3000"
     volumes:
       - ./services/rems/simple-config.edn:/rems/config/config.edn
     depends_on:
