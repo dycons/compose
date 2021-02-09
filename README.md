@@ -1,18 +1,28 @@
 # compose
 DyCons server configuration and deployment
 
+## Table of Contents
+- [compose](#compose)
+  - [Table of Contents](#table-of-contents)
+  - [Setting up Keycloak for testing:](#setting-up-keycloak-for-testing)
+  - [Participant Portal + Participant IdP](#participant-portal--participant-idp)
+  - [Researcher Portal + Researcher IdP](#researcher-portal--researcher-idp)
+  - [REMS + Researcher IdP](#rems--researcher-idp)
+
 ## Setting up Keycloak for testing:
 
 Setup expects the following reposto be available on the development/test machine:
 - [participant-portal](https://github.com/dycons/participant-portal)
 - [researcher-portal](https://github.com/dycons/researcher-portal)
 - [rems](https://github.com/CSCfi/rems)
+- [relay](https://github.com/dycons/relay)
 
 To set these up at the paths specified in this repo's `.env` file, you could run the following snippet:
 ```
 git clone https://github.com/dycons/participant-portal.git ../participant-portal && \
 git clone https://github.com/dycons/researcher-portal.git ../researcher-portal && \
-git clone https://github.com/CSCfi/rems.git ../rems
+git clone https://github.com/CSCfi/rems.git ../rems && \
+git clone https://github.com:dycons/relay.git ../relay
 ```
 
 **TODO** - Turn the following setup process into an automated step on startup.
@@ -98,3 +108,7 @@ git clone https://github.com/CSCfi/rems.git ../rems
    1. Navigate to REMS at http://localhost:3001/.
    2. Click on the "Login" button to be redirected to your keycloak instance.
    3. Access the account using `varchar`/`varchar`. You should be authenticated and redirected back to REMS.
+
+# Key Relay Service
+1. **Run** the Relay sevrice with `docker-compose up relay`
+2. (Optional) **Test** the Relay service by running the Postman collection at `tests/key-relay-service.postman_collection.json`
