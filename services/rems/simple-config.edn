@@ -10,5 +10,5 @@
  :oidc-client-secret "5f9b7052-6fee-409b-850e-40bef83366c7"
 ; EXAMPLE: :oidc-client-secret "be9d769d-a166-428c-b442-5ff703cb0a78"
 
- :entitlements-target {:add "http://consents:3005/v0/rems/add_entitlement"}
+; :entitlements-target {:add "http://consents:3005/v0/rems/add_entitlement"}
 }

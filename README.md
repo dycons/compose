@@ -116,6 +116,12 @@ git clone https://github.com/CSCfi/rems.git ../rems
    2. Click on the "Login" button to be redirected to your keycloak instance.
    3. Access the account using `varchar`/`varchar`. You should be authenticated and redirected back to REMS.
 
+### REMS + Consents
+To push new `entitlements` to the Consents service, uncomment the following line in `simple-config.edn` prior to running the REMS container:
+```
+:entitlements-target {:add "http://consents:3005/v0/rems/add_entitlement"}
+```
+
 ## Consents
 1. **Run** the Consents service with `docker-compose up consents`
 2. **Migrate** the Consents service with `./migrations/migrate.sh -s consents`
