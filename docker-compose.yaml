@@ -100,9 +100,12 @@ services:
     volumes:
       - katsu-db-data:/var/lib/postgresql/data
   katsu:
-    image: candig/chord-metadata:v1.0.0
+    image: candig/chord-metadata:v1.3.0
+    container_name: katsu
     volumes:
       - ./services/katsu/katsu_entrypoint.sh:/app/katsu_entrypoint.sh
+      - ./services/katsu/ingest.conf.json:/app/chord_metadata_service/scripts/ingest.conf.json
+      - ./services/katsu/cancogen_phenopackets.json:/app/cancogen_phenopackets.json
     entrypoint: ["/app/katsu_entrypoint.sh"]
     ports:
       - "8000:8000"
@@ -115,6 +118,17 @@ services:
       POSTGRES_USER: ${KATSU_POSTGRES_USER}
       POSTGRES_PASSWORD: ${KATSU_POSTGRES_PASSWORD}
 
+  relay:
+    build:
+      context: ${RELAY_DIR}
+      target: builder
+    ports:
+      - 3006:3000
+    volumes:
+      - ${RELAY_DIR}:/build
+      - /build/bin/
+    entrypoint: ["sh", "./init.sh"]
+    
 volumes:
   rems-db-data:
   katsu-db-data:
