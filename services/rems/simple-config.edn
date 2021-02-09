@@ -1,5 +1,5 @@
 {:port 3000
- :database-url "postgresql://db:5432/rems?user=rems&password=remspassword"
+ :database-url "postgresql://db-rems:5432/rems?user=rems&password=remspassword"
  :search-index-path "/tmp/rems-search-index"
  :authentication :oidc
  :public-url "http://localhost:3001/"
@@ -7,6 +7,8 @@
  :oidc-metadata-url "http://rp-keycloak:8080/auth/realms/dycons-researcher-idp/.well-known/openid-configuration"
 
  :oidc-client-id "rems-client"
- :oidc-client-secret "0ed4b9e0-5ff0-446a-ab7b-82dac465b9d5"
+ :oidc-client-secret "5f9b7052-6fee-409b-850e-40bef83366c7"
 ; EXAMPLE: :oidc-client-secret "be9d769d-a166-428c-b442-5ff703cb0a78"
+
+; :entitlements-target {:add "http://consents:3005/v0/rems/add_entitlement"}
 }
