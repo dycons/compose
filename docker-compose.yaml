@@ -1,8 +1,38 @@
 version: "3.7"
-volumes:
-  katsu-db-data:
 
 services:
+  db-consents:
+    # Use postgres 11.7 image to match stable postgres-client debian
+    image: "postgres:11.7-alpine"
+    environment:
+      POSTGRES_DB: ${CONSENTS_POSTGRES_DB}
+      POSTGRES_USER: ${CONSENTS_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${CONSENTS_POSTGRES_PASSWORD}
+    ports:
+      - "5434:5432"
+    volumes:
+      - consents-db-data:/var/lib/postgresql/data/
+  consents:
+    build:
+      context: ${CONSENTS_DIR}
+      dockerfile: ./docker/test.Dockerfile
+      target: consents
+      args:
+        - API_PATH=${CONSENTS_PROJECT_ROOT}/consents-service/api 
+        - SWAGGERFILE=${CONSENTS_PROJECT_ROOT}/swagger.yaml   
+    environment:
+      POSTGRES_DB: ${CONSENTS_POSTGRES_DB}
+      POSTGRES_USER: ${CONSENTS_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${CONSENTS_POSTGRES_PASSWORD}
+      POSTGRES_HOST: "db-consents"
+      POSTGRES_PORT: 5432
+      GOPATH: ${GOPATH}
+      APP_PATH: ${CONSENTS_PROJECT_ROOT}/consents-service
+    depends_on:
+      - db-consents
+    ports:
+      - "3005:3005"
+
   pp-keycloak:
     build:
       context: ${PARTICIPANT_PORTAL_KEYCLOAK_DIR}
@@ -19,19 +49,8 @@ services:
     volumes:
       - ${PARTICIPANT_PORTAL_REACT_DIR}:/app
       - /app/node_modules
-  rems:
-    build:
-      context: ${REMS_DIR}
-      dockerfile: Dockerfile
-    mem_reservation: 200m
-    mem_limit: 500m
-    ports:
-      - "127.0.0.1:3001:3000"
-    volumes:
-      - ./services/rems/simple-config.edn:/rems/config/config.edn
-    depends_on:
-      - db
-  db:
+
+  db-rems:
     image: postgres:9.6
     environment:
       POSTGRES_USER: rems
@@ -39,7 +58,20 @@ services:
     mem_reservation: 30m
     mem_limit: 150m
     ports:
-      - "127.0.0.1:5432:5432"
+      - "5433:5432"
+    volumes:
+      - rems-db-data:/var/lib/postgresql/data
+  rems:
+    image: cscfi/rems
+    mem_reservation: 200m
+    mem_limit: 500m
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./services/rems/simple-config.edn:/rems/config/config.edn
+    depends_on:
+      - db-rems
+    
   rp-keycloak:
     build:
       context: ${RESEARCHER_PORTAL_KEYCLOAK_DIR}
@@ -56,6 +88,7 @@ services:
     volumes:
       - ${RESEARCHER_PORTAL_REACT_DIR}:/app
       - /app/node_modules
+
   db-katsu:
     image: postgres:latest
     environment:
@@ -63,13 +96,16 @@ services:
       POSTGRES_USER: ${KATSU_POSTGRES_USER}
       POSTGRES_PASSWORD: ${KATSU_POSTGRES_PASSWORD}
     ports:
-      - "5432"
+      - "5432:5432"
     volumes:
       - katsu-db-data:/var/lib/postgresql/data
   katsu:
-    image: candig/chord-metadata:v1.0.0
+    image: candig/chord-metadata:v1.3.0
+    container_name: katsu
     volumes:
       - ./services/katsu/katsu_entrypoint.sh:/app/katsu_entrypoint.sh
+      - ./services/katsu/ingest.conf.json:/app/chord_metadata_service/scripts/ingest.conf.json
+      - ./services/katsu/cancogen_phenopackets.json:/app/cancogen_phenopackets.json
     entrypoint: ["/app/katsu_entrypoint.sh"]
     ports:
       - "8000:8000"
@@ -81,6 +117,7 @@ services:
       POSTGRES_DATABASE: ${KATSU_POSTGRES_DB}
       POSTGRES_USER: ${KATSU_POSTGRES_USER}
       POSTGRES_PASSWORD: ${KATSU_POSTGRES_PASSWORD}
+
   relay:
     build:
       context: ${RELAY_DIR}
@@ -93,3 +130,9 @@ services:
     entrypoint: ["sh", "./init.sh"]
     environment:
       SHARED_KEY: ${SHARED_KEY}
+
+    
+volumes:
+  rems-db-data:
+  katsu-db-data:
+  consents-db-data:
