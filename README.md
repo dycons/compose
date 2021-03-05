@@ -132,4 +132,4 @@ To push new `entitlements` to the Consents service, uncomment the following line
 
 ## Key Relay Service
 1. **Run** the Relay sevrice with `docker-compose up relay`
-2. (Optional) **Test** the Relay service by running the Postman collection at `tests/key-relay-service.postman_collection.json`
+2. (Optional) **Test** the Relay service by running the Postman collection at `../relay/tests/key-relay-service.postman_collection.json`
