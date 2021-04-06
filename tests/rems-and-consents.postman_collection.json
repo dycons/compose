@@ -1,0 +1,1202 @@
+{
+	"info": {
+		"_postman_id": "76bef2a4-dfee-4a62-ba08-2b580b6a9b72",
+		"name": "rems-and-consents",
+		"description": "A collection of requests testing the REMS add-entitlements webhook, which is ingested by the Consents service to initialize ProjectConsents.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Initialize resource",
+			"item": [
+				{
+					"name": "Add a participant to Consents",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Set the study_identfier param for subsequent requests",
+									"pm.collectionVariables.set(\"study_identifier\", responseData.study_identifier);",
+									"",
+									"// Set the expected consents for subsequent requests",
+									"const requestData = JSON.parse(request.data);",
+									"switch(requestData.genetic_consent_style) {",
+									"  case \"OO\":",
+									"    pm.collectionVariables.set(\"expected_genetic_consent\", true);",
+									"    break;",
+									"  default:",
+									"    pm.collectionVariables.set(\"expected_genetic_consent\", false);",
+									"}",
+									"switch(requestData.clinical_consent_style) {",
+									"  case \"OO\":",
+									"    pm.collectionVariables.set(\"expected_clinical_consent\", true);",
+									"    break;",
+									"  default:",
+									"    pm.collectionVariables.set(\"expected_clinical_consent\", false);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"genetic_consent_style\": \"{{genetic_consent_style}}\",\n    \"clinical_consent_style\": \"{{clinical_consent_style}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{consents_scheme}}{{consents_host}}{{consents_base_path}}/participants",
+							"host": [
+								"{{consents_scheme}}{{consents_host}}{{consents_base_path}}"
+							],
+							"path": [
+								"participants"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create users in REMS",
+			"item": [
+				{
+					"name": "Add owning user to REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{x-rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{x-rems-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userid\": \"{{x-rems-user-id}}\",\n  \"name\": \"owning user\",\n  \"email\": \"owner email\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}/api/users/create",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add applying user to REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{x-rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{x-rems-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userid\": \"{{rems-applicant-user-id}}\",\n  \"name\": \"applying user\",\n  \"email\": \"applicant email\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}/api/users/create",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create catalogue item for resource in REMS",
+			"item": [
+				{
+					"name": "Add organization to REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{x-rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{x-rems-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"archived\": true,\n  \"organization/id\": \"test-org\",\n  \"organization/short-name\": {\n    \"en\": \"A test organization\"\n  },\n  \"enabled\": true,\n  \"organization/owners\": [\n    {\n      \"userid\": \"{{x-rems-user-id}}\"\n    }\n  ],\n  \"organization/name\": {\n    \"en\": \"This is a test organization\"\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}/api/organizations/create",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}"
+							],
+							"path": [
+								"api",
+								"organizations",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add form to REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Set the form_id param for subsequent requests",
+									"pm.collectionVariables.set(\"form_id\", responseData.id);",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{x-rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{x-rems-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"organization\": {\n    \"organization/id\": \"string\"\n  },\n  \"form/title\": \"test-form\",\n  \"form/fields\": [\n    {\n      \"field/title\": {\n        \"fi\": \"text in Finnish\",\n        \"en\": \"text in English\"\n      },\n      \"field/type\": \"description\",\n      \"field/optional\": true\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}/api/forms/create",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}"
+							],
+							"path": [
+								"api",
+								"forms",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add license to REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Set the license_id param for subsequent requests",
+									"pm.collectionVariables.set(\"license_id\", responseData.id);",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{x-rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{x-rems-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"licensetype\": \"attachment\",\n  \"organization\": {\n    \"organization/id\": \"string\"\n  },\n  \"localizations\": {\n    \"en\": {\n      \"title\": \"English title\",\n      \"textcontent\": \"English content\"\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}/api/licenses/create",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}"
+							],
+							"path": [
+								"api",
+								"licenses",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add resource to REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Set the resource_id param for subsequent requests",
+									"pm.collectionVariables.set(\"resource_id\", responseData.id);",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{x-rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"value": "{{x-rems-user-id}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"resid\": \"{{study_identifier}}\",\n  \"organization\": {\n    \"organization/id\": \"string\"\n  },\n  \"licenses\": [\n    {{license_id}}\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}/api/resources/create",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}"
+							],
+							"path": [
+								"api",
+								"resources",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add workflow to REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Set the workflow_id param for subsequent requests",
+									"pm.collectionVariables.set(\"workflow_id\", responseData.id);",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{x-rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{x-rems-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"organization\": {\n    \"organization/id\": \"string\"\n  },\n  \"title\": \"string\",\n  \"type\": \"workflow/default\",\n  \"handlers\": [\n    \"{{x-rems-user-id}}\"\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}/api/workflows/create",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}"
+							],
+							"path": [
+								"api",
+								"workflows",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add catalogue item to REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Set the catalog_item_id param for subsequent requests",
+									"pm.collectionVariables.set(\"catalog_item_id\", responseData.id);",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{x-rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"value": "{{x-rems-user-id}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"form\": {{form_id}},\n  \"resid\": {{resource_id}},\n  \"wfid\": {{workflow_id}},\n  \"organization\": {\n    \"organization/id\": \"string\"\n  },\n  \"localizations\": {\n    \"en\": {\n      \"title\": \"Title in English\",\n      \"infourl\": \"http://example.com\"\n    }\n  },\n  \"enabled\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}/api/catalogue-items/create",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}"
+							],
+							"path": [
+								"api",
+								"catalogue-items",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Apply to catalogue item in REMS",
+			"item": [
+				{
+					"name": "Apply to catalog-item in REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Set the application_id param for subsequent requests",
+									"pm.collectionVariables.set(\"application_id\", responseData['application-id']);",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{x-rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{rems-applicant-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"catalogue-item-ids\": [\n    {{catalog_item_id}}\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}/api/applications/create",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check new REMS application",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{x-rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{x-rems-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}/api/applications/{{application_id}}/raw",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{application_id}}",
+								"raw"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accept licenses in REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{x-rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{rems-applicant-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"application-id\": {{application_id}},\n  \"accepted-licenses\": [\n    {{license_id}}\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}/api/applications/accept-licenses",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"accept-licenses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Submit application in REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{x-rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{rems-applicant-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"application-id\": {{application_id}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}/api/applications/submit",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"submit"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Approve application in REMS",
+			"item": [
+				{
+					"name": "Approve application in REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{x-rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{x-rems-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"application-id\": {{application_id}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}/api/applications/approve",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"approve"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View REMS entitlements",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData).to.be.an(\"array\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{x-rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{rems-applicant-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}/api/entitlements?expired=true",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}"
+							],
+							"path": [
+								"api",
+								"entitlements"
+							],
+							"query": [
+								{
+									"key": "expired",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "rems_scheme",
+			"value": "http://"
+		},
+		{
+			"key": "rems_host",
+			"value": "0.0.0.0:3001"
+		},
+		{
+			"key": "consents_scheme",
+			"value": "http://"
+		},
+		{
+			"key": "consents_host",
+			"value": "0.0.0.0:3005"
+		},
+		{
+			"key": "consents_base_path",
+			"value": "/v0"
+		},
+		{
+			"key": "study_identifier",
+			"value": ""
+		},
+		{
+			"key": "genetic_consent_style",
+			"value": ""
+		},
+		{
+			"key": "clinical_consent_style",
+			"value": ""
+		},
+		{
+			"key": "expected_genetic_consent",
+			"value": ""
+		},
+		{
+			"key": "expected_clinical_consent",
+			"value": ""
+		},
+		{
+			"key": "organization_id",
+			"value": "test-org"
+		},
+		{
+			"key": "form_id",
+			"value": ""
+		},
+		{
+			"key": "license_id",
+			"value": ""
+		},
+		{
+			"key": "resource_id",
+			"value": ""
+		},
+		{
+			"key": "workflow_id",
+			"value": ""
+		},
+		{
+			"key": "catalog_item_id",
+			"value": ""
+		},
+		{
+			"key": "application_id",
+			"value": ""
+		},
+		{
+			"key": "x-rems-api-key",
+			"value": "123abc"
+		},
+		{
+			"key": "x-rems-user-id",
+			"value": ""
+		},
+		{
+			"key": "rems-applicant-user-id",
+			"value": ""
+		}
+	]
+}

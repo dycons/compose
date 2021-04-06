@@ -114,15 +114,22 @@ git clone https://github.com:dycons/relay.git ../relay
    1. In the Researcher IdP keycloak at http://localhost:3002/auth/admin, navigate to *Clients* (on the left side of the screen) > `researcher-portal-client` > *Credentials* and click `Regenerate Secret`. Copy the generated secret, ex. `be9d769d-a166-428c-b442-5ff703cb0a78`.
    2. Open `compose/services/rems/simple-config.edn` and modify the `:oidc-client-secret` param to use the secret generated in step 3.
    3. Boot up REMS by running `docker-compose up rems` in the `compose` directory.
-7. **Testing**
+7. **Testing in the browser**:
    1. Navigate to REMS at http://localhost:3001/.
    2. Click on the "Login" button to be redirected to your keycloak instance.
    3. Access the account using `varchar`/`varchar`. You should be authenticated and redirected back to REMS.
+8. *(Optional)* **Testing the API**:
+   You can test the REMS API by submitting requests through the instance's [Swagger UI](http://localhost:3001/swagger-ui/index.html), or by running requests from the [Postman collection and test data](https://github.com/dycons/compose/tree/develop/tests). For the latter option, testing the API outside of the browser will require you to include some authorization information in the request headers.
+   1. **Prepare credentials**: Provide REMS with an API key **and** grant your user the `owner` role by running `./init/authorize.sh USERID [options]`. By default, the API key set by this script is `abc123`, matching the API key in the Postman collection, but you can optionally set a custom key.
+   2. Make sure your user is known to REMS. This can be accomplished by logging in through the browser **or** by sending a request to the `/api/users/create` endpoint. The `userid` must match the user's id in Keycloak.
+   3. Add headers to your requests containing the following key-value pairs:
+      - `x-rems-api-key`: The API key to use for authorizing your call. Must be known to REMS.
+      - `x-rems-user-id`: The ID of your user in REMS, as set by Keycloak.
 
 ### REMS + Consents
 To push new `entitlements` to the Consents service, uncomment the following line in `simple-config.edn` prior to running the REMS container:
 ```
-:entitlements-target {:add "http://consents:3005/v0/rems/add_entitlement"}
+:entitlements-target {:add "http://consents:3005/v0/rems/add_entitlements"}
 ```
 
 ## Consents
