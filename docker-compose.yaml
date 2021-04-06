@@ -34,8 +34,7 @@ services:
       - "3005:3005"
 
   pp-keycloak:
-    build:
-      context: ${PARTICIPANT_PORTAL_KEYCLOAK_DIR}
+    image: quay.io/keycloak/keycloak:11.0.2
     environment:
       KEYCLOAK_USER: ${KEYCLOAK_USER}
       KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
@@ -73,8 +72,7 @@ services:
       - db-rems
     
   rp-keycloak:
-    build:
-      context: ${RESEARCHER_PORTAL_KEYCLOAK_DIR}
+    image: quay.io/keycloak/keycloak:11.0.2
     environment:
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: admin
