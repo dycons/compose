@@ -6,24 +6,27 @@ DyCons server configuration and deployment
   - [Table of Contents](#table-of-contents)
   - [Setting up Keycloak for testing:](#setting-up-keycloak-for-testing)
   - [Participant Portal + Participant IdP](#participant-portal--participant-idp)
-  - [Researcher Portal + Researcher IdP](#researcher-portal--researcher-idp)
+  - [Researcher Portal + Researcher IdP + Katsu + REMS + OPA](#researcher-portal--researcher-idp--katsu--rems--opa)
   - [REMS + Researcher IdP](#rems--researcher-idp)
 
 ## Setting up Keycloak for testing:
 
-Setup expects the following reposto be available on the development/test machine:
+Setup expects the following repos to be available on the development/test machine:
 - [participant-portal](https://github.com/dycons/participant-portal)
 - [researcher-portal](https://github.com/dycons/researcher-portal)
 - [rems](https://github.com/CSCfi/rems)
 - [consents](https://github.com/dycons/consents)
 - [relay](https://github.com/dycons/relay)
+- [candigv2_opa](https://github.com/CanDIG/candigv2_opa)
 
 To set these up at the paths specified in this repo's `.env` file, you could run the following snippet:
 ```
 git clone https://github.com/dycons/participant-portal.git ../participant-portal && \
 git clone https://github.com/dycons/researcher-portal.git ../researcher-portal && \
 git clone https://github.com/CSCfi/rems.git ../rems && \
-git clone https://github.com:dycons/relay.git ../relay
+git clone https://github.com/dycons/consents.git ../consents && \
+git clone https://github.com/dycons/relay.git ../relay && \
+git clone https://github.com/CanDIG/candigv2_opa.git ../candigv2_opa
 ```
 
 **TODO** - Turn the following setup process into an automated step on startup.
@@ -52,23 +55,61 @@ git clone https://github.com:dycons/relay.git ../relay
       2. Run `yarn start` to compile the app.
       3. Continue development on your machine - changes will be mapped to the volume inside the container and reflected at http://127.0.0.1:3002
 
-## Researcher Portal + Researcher IdP + Katsu
-1. First make sure the services are running via `docker-compose up rp-keycloak katsu`.
-2. **Add test Realm:**
+## Researcher Portal + Researcher IdP + Katsu + REMS + OPA
+1. **Start up Researcher IdP, Katsu and OPA**:
+   1. Run `docker-compose up rp-keycloak katsu`.
+2. **Add Test Realm**:
    1. Navigate to http://127.0.0.1:3002/auth/admin.
    2. Login using the username and password: `admin` / `admin`.
    3. Add the test **Realm** by hovering over the "Master" label in the top left, and click "Add realm".
    4. Click "Select File" and choose the preconfigured realm at `../researcher-portal/keycloak/realms-export.json`. The name should be autofilled with `dycons-researcher-idp`.
    5. Click "Create" to finish.
-3. **Add test User**:
+3. **Add Test Users**:
    1. Navigate to the "Users" menu via the navbar on the left.
-   2. Click "Add User" on the right side of the page.
+   2. Click "Add user" on the right side of the page.
    3. Set the username to `varchar` and click "Save".
    4. On the next page, click the "Credentials" tab.
    5. Enter `varchar` in both password fields, toggle `Temporary` *off*, and click "Set Password".
-4. **Add sample Katsu data**:
+   6. Navigate to the "Users" menu via the navbar on the left.
+   7. Click "Add user" on the right side of the page.
+   8. Set the username to `owner` and click "Save".
+   9. Copy the value in the `ID` field and assign this value to `REMS_OWNER_ID` in the `.env` file.
+   10. On the next page, click the "Credentials" tab.
+   11. Enter `owner` in both password fields, toggle `Temporary` *off*, and click "Set Password".
+4. **Expose Keycloak to REMS**:
+   1. Navigate to "Clients" via the navbar on the left.
+   2. Under column "Client ID", select `rems-client`.
+   3. Click the "Credentials" tab.
+   4. Click `Regenerate Secret` and copy the secret generated.
+   5. Open `services/rems/simple-config.edn` and modify the `:oidc-client-secret` key to use the secret generated.
+5. **Add Sample Katsu Data**:
    1. To add sample data to Katsu, run: `docker exec -it -w /app/chord_metadata_service/scripts katsu python ingest.py`.
-5. **Testing** - Now it's time to test our setup by using the bundled front end:
+6. **Add Authorization Rules to OPA**:
+   1. Run `./services/opa/opa_initialize.sh`.
+7. **Migrate and Seed REMS**:
+   1. Run `./migrations/migrate.sh -s rems` to prepare the database and migrate the required tables.
+   2. Run `docker-compose run --rm -e CMD="test-data" rems` to populate REMS with test data.
+8. **Start up REMS**:
+   1. Run `docker-compose up rems`.
+9. **Log In to REMS**:
+   1. Navigate to http://127.0.0.1:3001.
+   2. Click "Login".
+   3. Login using the username and password: `owner` / `owner`.
+   4. In the top right, click "Sign out".
+   5. In a new tab, navigate to http://127.0.0.1:3002/auth/admin.
+   6. Login using the username and password: `admin` / `admin`.
+   7. Navigate to the "Sessions" menu via the navbar on the left.
+   8. Click "Logout all" on the right side of the page.
+   9. Navigate to the tab http://127.0.0.1:3001.
+   10. Click "Login".
+   11. Login using the username and password: `varchar` / `varchar`.
+   12. In the top right, click "Sign out".
+   13. Navigate to the tab http://127.0.0.1:3002/auth/admin.
+   14. Navigate to the "Sessions" menu via the navbar on the left.
+   15. Click "Logout all" on the right side of the page.
+10. **Initialize REMS**:
+   1. Run `./services/rems/rems_initialize.sh`.
+11. **Testing** - Now it's time to test our setup by using the bundled front end:
    1. Boot up the React frontend by running `docker-compose up rp-react`.
    2. Start by going to http://127.0.0.1:3004/.
    3. Click on the "Log In" button and you should be redirected to the Keycloak login screen.
