@@ -63,12 +63,15 @@ services:
       - rems-db-data:/var/lib/postgresql/data
   rems:
     image: cscfi/rems
+    container_name: rems
     mem_reservation: 200m
     mem_limit: 500m
     ports:
       - "3001:3000"
     volumes:
       - ./services/rems/simple-config.edn:/rems/config/config.edn
+      - ./services/rems/public_key:/rems/public_key
+      - ./services/rems/private_key:/rems/private_key
     depends_on:
       - db-rems
     
@@ -88,6 +91,8 @@ services:
     volumes:
       - ${RESEARCHER_PORTAL_REACT_DIR}:/app
       - /app/node_modules
+    environment:
+      REACT_APP_REMS_OWNER_ID: ${REMS_OWNER_ID}
 
   db-katsu:
     image: postgres:latest
@@ -100,7 +105,7 @@ services:
     volumes:
       - katsu-db-data:/var/lib/postgresql/data
   katsu:
-    image: candig/chord-metadata:v1.3.0
+    image: samarth01/candig-katsu:latest
     container_name: katsu
     volumes:
       - ./services/katsu/katsu_entrypoint.sh:/app/katsu_entrypoint.sh
@@ -111,12 +116,14 @@ services:
       - "8000:8000"
     depends_on:
       - db-katsu
+      - opa
     environment:
       POSTGRES_HOST: "db-katsu"
       POSTGRES_PORT: 5432
       POSTGRES_DATABASE: ${KATSU_POSTGRES_DB}
       POSTGRES_USER: ${KATSU_POSTGRES_USER}
       POSTGRES_PASSWORD: ${KATSU_POSTGRES_PASSWORD}
+      CANDIG_OPA_URL: http://opa:8181
 
   relay:
     build:
@@ -128,6 +135,13 @@ services:
       - ${RELAY_DIR}:/build
       - /build/bin/
     entrypoint: ["sh", "./init.sh"]
+
+  opa:
+    image: openpolicyagent/opa:latest
+    container_name: opa
+    ports:
+      - "8181:8181"
+    entrypoint: ["/opa", "run", "--server", "--log-level", "debug"]
     
 volumes:
   rems-db-data:
