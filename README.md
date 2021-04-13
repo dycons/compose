@@ -94,7 +94,7 @@ git clone https://github.com:dycons/relay.git ../relay
       ```
    4. Run `docker-compose build rems` from the `compose` directory to build the dockerfile, which will package the jar you just built.
 2. **Migrate and seed REMS**:
-   1. Run `./init/migrate.sh -s rems` to prepare the database and migrate the required tables.
+   1. Run `./init/migrate.sh rems` to prepare the database and migrate the required tables.
    2. (Optional) Run `docker-compose run --rm -e CMD="test-data" rems` to populate REMS with test data.
    3. REMS should now be ready for use.
 3. Boot up the researcher keycloak instance by running `docker-compose up rp-keycloak`
@@ -134,7 +134,7 @@ To push new `entitlements` to the Consents service, uncomment the following line
 
 ## Consents
 1. **Run** the Consents service with `docker-compose up consents`
-2. **Migrate** the Consents service with `./init/migrate.sh -s consents`
+2. **Migrate** the Consents service with `./init/migrate.sh consents`
 3. (Optional) **Test** the Consents service by running requests from the [Postman collection and test data](https://github.com/dycons/consents/tree/develop/tests).
 
 ## Key Relay Service

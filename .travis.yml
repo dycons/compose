@@ -1,0 +1,32 @@
+language: node_js
+
+node_js:
+  - node
+
+cache:
+  directories:
+    - ~/build/dycons/compose/node_modules
+
+addons:
+  apt:
+    packages:
+    - docker-ce
+
+services:
+ - docker
+
+before_install:
+ - npm root
+ - docker --version
+
+install:
+ - docker-compose up --detach rp-keycloak
+ - ./init/keycloak.sh
+
+
+before_script:
+ - npm install newman
+ - ~/build/dycons/consents/node_modules/.bin/newman --version
+
+script:
+ - ~/build/dycons/consents/node_modules/.bin/newman run ./tests/consents-service.postman_collection.json -d tests/postman-data.csv
