@@ -54,25 +54,15 @@ git clone https://github.com:dycons/relay.git ../relay
 
 ## Researcher Portal + Researcher IdP + Katsu
 1. First make sure the services are running via `docker-compose up rp-keycloak katsu`.
-2. **Add test Realm:**
-   1. Navigate to http://127.0.0.1:3002/auth/admin.
-   2. Login using the username and password: `admin` / `admin`.
-   3. Add the test **Realm** by hovering over the "Master" label in the top left, and click "Add realm".
-   4. Click "Select File" and choose the preconfigured realm at `../researcher-portal/keycloak/realms-export.json`. The name should be autofilled with `dycons-researcher-idp`.
-   5. Click "Create" to finish.
-3. **Add test User**:
-   1. Navigate to the "Users" menu via the navbar on the left.
-   2. Click "Add User" on the right side of the page.
-   3. Set the username to `varchar` and click "Save".
-   4. On the next page, click the "Credentials" tab.
-   5. Enter `varchar` in both password fields, toggle `Temporary` *off*, and click "Set Password".
-4. **Add sample Katsu data**:
+2. **Add test User**:
+   1. To add a test user (username: `applicant`, password: `applicant`) to rp-keycloak, run: `./init/rp-keycloak.sh`
+3. **Add sample Katsu data**:
    1. To add sample data to Katsu, run: `docker exec -it -w /app/chord_metadata_service/scripts katsu python ingest.py`.
-5. **Testing** - Now it's time to test our setup by using the bundled front end:
+4. **Testing** - Now it's time to test our setup by using the bundled front end:
    1. Boot up the React frontend by running `docker-compose up rp-react`.
    2. Start by going to http://127.0.0.1:3004/.
    3. Click on the "Log In" button and you should be redirected to the Keycloak login screen.
-   4. Access the account using `varchar`/`varchar`. You'll be redirected back to the React frontend.
+   4. Access the account using `applicant`/`applicant`. You'll be redirected back to the React frontend.
    5. ** For active development **
       1. Instead of step 1, run: `docker-compose run --rm --entrypoint sh --service-port rp-react`. This will log you into the application.
       2. Run `npm start` to compile the app.
@@ -98,33 +88,28 @@ git clone https://github.com:dycons/relay.git ../relay
    2. (Optional) Run `docker-compose run --rm -e CMD="test-data" rems` to populate REMS with test data.
    3. REMS should now be ready for use.
 3. Boot up the researcher keycloak instance by running `docker-compose up rp-keycloak`
-4. **Add test Realm**:
-   1. Access the Researcher IdP at http://localhost:3002/auth/admin
-   2. Login using the username and password: `admin` / `admin`
-   3. Add the test *Realm* by hovering over the "Master" label in the top left and click "Add realm".
-   4. Click "Select File" and choose the preconfigured realm at `../researcher-portal/keycloak/realm-export.json`. The name should be autofilled with `dycons-researcher-idp`.
-   5. Click "Save" to finish.
-5. **Add test User**:
-   1. Navigate to the "Users" menu via the navbar on the left
-   2. Click "Add User" on the right side of the page
-   3. Set the username to `varchar` and click "Save".
-   4. On the next page, click the "Credentials" tab
-   5. Enter `varchar` in both password fields, toggle `Temporary` *off*, and click "Set Password"
-6. **Expose Keycloak to REMS**:
-   1. In the Researcher IdP keycloak at http://localhost:3002/auth/admin, navigate to *Clients* (on the left side of the screen) > `researcher-portal-client` > *Credentials* and click `Regenerate Secret`. Copy the generated secret, ex. `be9d769d-a166-428c-b442-5ff703cb0a78`.
-   2. Open `compose/services/rems/simple-config.edn` and modify the `:oidc-client-secret` param to use the secret generated in step 3.
-   3. Boot up REMS by running `docker-compose up rems` in the `compose` directory.
-7. **Testing in the browser**:
+4. **Prepare Keycloak**:
+   1. To prepare the keycloak for use with rems, run: `. ./init/rp-keycloak.sh -e`. This will accomplish the following:
+      1. Create a generic `.env` file from the `.default.env` template provided, complete with the REMS client secret from keycloak.
+      2. Add two test users
+         - username: `applicant`, password: `applicant`
+         - username: `owner`, password: `owner`
+      3. Export the following environment variables to your shell, for use in authorization. Skip sourcing the script if this is not desired.
+         - REMS_CLIENT_SECRET
+         - OWNER_ID
+         - APPLICANT_ID
+5. **Testing in the browser**:
    1. Navigate to REMS at http://localhost:3001/.
    2. Click on the "Login" button to be redirected to your keycloak instance.
-   3. Access the account using `varchar`/`varchar`. You should be authenticated and redirected back to REMS.
-8. *(Optional)* **Testing the API**:
+   3. Access the account using `applicant`/`applicant`. You should be authenticated and redirected back to REMS.
+6. *(Optional)* **Testing the API**:
    You can test the REMS API by submitting requests through the instance's [Swagger UI](http://localhost:3001/swagger-ui/index.html), or by running requests from the [Postman collection and test data](https://github.com/dycons/compose/tree/develop/tests). For the latter option, testing the API outside of the browser will require you to include some authorization information in the request headers.
    1. **Prepare credentials**: Provide REMS with an API key **and** grant your user the `owner` role by running `./init/authorize.sh USERID [options]`. By default, the API key set by this script is `abc123`, matching the API key in the Postman collection, but you can optionally set a custom key.
+      - The USERID is output by the `init/rp-keycloak.sh` script used to prepare keycloak. If you sourced the script, you can use the `$OWNER_ID` and `$APPLICANT_ID` environment variables in your shell.
    2. Make sure your user is known to REMS. This can be accomplished by logging in through the browser **or** by sending a request to the `/api/users/create` endpoint. The `userid` must match the user's id in Keycloak.
    3. Add headers to your requests containing the following key-value pairs:
       - `x-rems-api-key`: The API key to use for authorizing your call. Must be known to REMS.
-      - `x-rems-user-id`: The ID of your user in REMS, as set by Keycloak.
+      - `x-rems-user-id`: The ID of your user in REMS, as set by Keycloak (ex. `$OWNER_ID`)
 
 ### REMS + Consents
 To push new `entitlements` to the Consents service, uncomment the following line in `simple-config.edn` prior to running the REMS container:

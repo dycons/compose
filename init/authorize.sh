@@ -66,6 +66,7 @@ case $service in
         docker-compose -f $composefile exec $service sh -c \
         'java -Drems.config=/rems/config/config.edn -jar rems.jar grant-role owner '$user
         echo 'Attempted to grant owner role to '$user
+        ;;
     *)
         echo "I do not know how to authorize users for this service. Exiting."
         ;;
