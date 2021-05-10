@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "Initialize resource",
+			"name": "Intialize resource",
 			"item": [
 				{
 					"name": "Add a participant to Consents",
@@ -77,76 +77,6 @@
 			"name": "Create users in REMS",
 			"item": [
 				{
-					"name": "Add owning user to REMS",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"// Test that request succeeded",
-									"pm.test(\"Successful POST request\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"const responseData = pm.response.json();",
-									"",
-									"// Test that response values equal the expected values",
-									"pm.test(\"Response values satisfy expectations\", () => {",
-									"    pm.expect(responseData.success).to.eql(true);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "apikey",
-							"apikey": [
-								{
-									"key": "value",
-									"value": "{{x-rems-api-key}}",
-									"type": "string"
-								},
-								{
-									"key": "key",
-									"value": "x-rems-api-key",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "x-rems-user-id",
-								"type": "text",
-								"value": "{{x-rems-user-id}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"userid\": \"{{x-rems-user-id}}\",\n  \"name\": \"owning user\",\n  \"email\": \"owner email\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{rems_scheme}}{{rems_host}}/api/users/create",
-							"host": [
-								"{{rems_scheme}}{{rems_host}}"
-							],
-							"path": [
-								"api",
-								"users",
-								"create"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Add applying user to REMS",
 					"event": [
 						{
@@ -175,7 +105,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{x-rems-api-key}}",
+									"value": "{{rems-api-key}}",
 									"type": "string"
 								},
 								{
@@ -186,13 +116,7 @@
 							]
 						},
 						"method": "POST",
-						"header": [
-							{
-								"key": "x-rems-user-id",
-								"type": "text",
-								"value": "{{x-rems-user-id}}"
-							}
-						],
+						"header": [],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"userid\": \"{{rems-applicant-user-id}}\",\n  \"name\": \"applying user\",\n  \"email\": \"applicant email\"\n}",
@@ -203,7 +127,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{rems_scheme}}{{rems_host}}/api/users/create",
+							"raw": "{{rems_scheme}}{{rems_host}}/api/users/create?x-rems-user-id={{rems-owner-user-id}}",
 							"host": [
 								"{{rems_scheme}}{{rems_host}}"
 							],
@@ -211,8 +135,15 @@
 								"api",
 								"users",
 								"create"
+							],
+							"query": [
+								{
+									"key": "x-rems-user-id",
+									"value": "{{rems-owner-user-id}}"
+								}
 							]
-						}
+						},
+						"description": "In order to create a user in REMS, you must provide the user ID of a user with the owner role in the x-rems-user-id header.\nTherefore, at least one user must actually log in to REMS via the UI and then have the owner role assigned to them. After this is done, all other users may be created by POSTing to this endpoint."
 					},
 					"response": []
 				}
@@ -250,7 +181,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{x-rems-api-key}}",
+									"value": "{{rems-api-key}}",
 									"type": "string"
 								},
 								{
@@ -265,12 +196,12 @@
 							{
 								"key": "x-rems-user-id",
 								"type": "text",
-								"value": "{{x-rems-user-id}}"
+								"value": "{{rems-owner-user-id}}"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"archived\": true,\n  \"organization/id\": \"test-org\",\n  \"organization/short-name\": {\n    \"en\": \"A test organization\"\n  },\n  \"enabled\": true,\n  \"organization/owners\": [\n    {\n      \"userid\": \"{{x-rems-user-id}}\"\n    }\n  ],\n  \"organization/name\": {\n    \"en\": \"This is a test organization\"\n  }\n}",
+							"raw": "{\n  \"archived\": true,\n  \"organization/id\": \"test-org\",\n  \"organization/short-name\": {\n    \"en\": \"A test organization\"\n  },\n  \"enabled\": true,\n  \"organization/owners\": [\n    {\n      \"userid\": \"{{rems-owner-user-id}}\"\n    }\n  ],\n  \"organization/name\": {\n    \"en\": \"This is a test organization\"\n  }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -323,7 +254,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{x-rems-api-key}}",
+									"value": "{{rems-api-key}}",
 									"type": "string"
 								},
 								{
@@ -338,7 +269,7 @@
 							{
 								"key": "x-rems-user-id",
 								"type": "text",
-								"value": "{{x-rems-user-id}}"
+								"value": "{{rems-owner-user-id}}"
 							}
 						],
 						"body": {
@@ -396,7 +327,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{x-rems-api-key}}",
+									"value": "{{rems-api-key}}",
 									"type": "string"
 								},
 								{
@@ -411,7 +342,7 @@
 							{
 								"key": "x-rems-user-id",
 								"type": "text",
-								"value": "{{x-rems-user-id}}"
+								"value": "{{rems-owner-user-id}}"
 							}
 						],
 						"body": {
@@ -469,7 +400,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{x-rems-api-key}}",
+									"value": "{{rems-api-key}}",
 									"type": "string"
 								},
 								{
@@ -483,7 +414,7 @@
 						"header": [
 							{
 								"key": "x-rems-user-id",
-								"value": "{{x-rems-user-id}}",
+								"value": "{{rems-owner-user-id}}",
 								"type": "text"
 							}
 						],
@@ -542,7 +473,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{x-rems-api-key}}",
+									"value": "{{rems-api-key}}",
 									"type": "string"
 								},
 								{
@@ -557,12 +488,12 @@
 							{
 								"key": "x-rems-user-id",
 								"type": "text",
-								"value": "{{x-rems-user-id}}"
+								"value": "{{rems-owner-user-id}}"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"organization\": {\n    \"organization/id\": \"string\"\n  },\n  \"title\": \"string\",\n  \"type\": \"workflow/default\",\n  \"handlers\": [\n    \"{{x-rems-user-id}}\"\n  ]\n}",
+							"raw": "{\n  \"organization\": {\n    \"organization/id\": \"string\"\n  },\n  \"title\": \"string\",\n  \"type\": \"workflow/default\",\n  \"handlers\": [\n    \"{{rems-owner-user-id}}\"\n  ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -615,7 +546,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{x-rems-api-key}}",
+									"value": "{{rems-api-key}}",
 									"type": "string"
 								},
 								{
@@ -629,7 +560,7 @@
 						"header": [
 							{
 								"key": "x-rems-user-id",
-								"value": "{{x-rems-user-id}}",
+								"value": "{{rems-owner-user-id}}",
 								"type": "text"
 							}
 						],
@@ -693,7 +624,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{x-rems-api-key}}",
+									"value": "{{rems-api-key}}",
 									"type": "string"
 								},
 								{
@@ -759,7 +690,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{x-rems-api-key}}",
+									"value": "{{rems-api-key}}",
 									"type": "string"
 								},
 								{
@@ -774,7 +705,7 @@
 							{
 								"key": "x-rems-user-id",
 								"type": "text",
-								"value": "{{x-rems-user-id}}"
+								"value": "{{rems-owner-user-id}}"
 							}
 						],
 						"body": {
@@ -830,7 +761,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{x-rems-api-key}}",
+									"value": "{{rems-api-key}}",
 									"type": "string"
 								},
 								{
@@ -900,7 +831,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{x-rems-api-key}}",
+									"value": "{{rems-api-key}}",
 									"type": "string"
 								},
 								{
@@ -975,7 +906,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{x-rems-api-key}}",
+									"value": "{{rems-api-key}}",
 									"type": "string"
 								},
 								{
@@ -990,7 +921,7 @@
 							{
 								"key": "x-rems-user-id",
 								"type": "text",
-								"value": "{{x-rems-user-id}}"
+								"value": "{{rems-owner-user-id}}"
 							}
 						],
 						"body": {
@@ -1048,7 +979,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{x-rems-api-key}}",
+									"value": "{{rems-api-key}}",
 									"type": "string"
 								},
 								{
@@ -1089,6 +1020,79 @@
 									"key": "expired",
 									"value": "true"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View REMS permissions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData).to.be.an(\"array\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{rems-applicant-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}/api/permissions/{{rems-applicant-user-id}}",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}"
+							],
+							"path": [
+								"api",
+								"permissions",
+								"{{rems-applicant-user-id}}"
 							]
 						}
 					},
@@ -1357,18 +1361,6 @@
 		},
 		{
 			"key": "application_id",
-			"value": ""
-		},
-		{
-			"key": "x-rems-api-key",
-			"value": "123abc"
-		},
-		{
-			"key": "x-rems-user-id",
-			"value": ""
-		},
-		{
-			"key": "rems-applicant-user-id",
 			"value": ""
 		}
 	]
