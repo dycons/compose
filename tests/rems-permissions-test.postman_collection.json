@@ -16,6 +16,11 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
 									"if (responseCode.code == 201) {",
 									"    const jsonData = JSON.parse(responseBody);",
 									"    pm.collectionVariables.set(\"project_id\", jsonData.identifier);",
@@ -56,6 +61,11 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
 									"if (responseCode.code == 201) {",
 									"    const jsonData = JSON.parse(responseBody);",
 									"    pm.collectionVariables.set(\"dataset_id\", jsonData.identifier);",
@@ -96,6 +106,11 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
 									"if (responseCode.code == 201) {",
 									"    const jsonData = JSON.parse(responseBody);",
 									"    pm.collectionVariables.set(\"table_id\", jsonData.table_id);",
@@ -131,6 +146,20 @@
 				},
 				{
 					"name": "Add table",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -162,6 +191,11 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
 									"if (responseCode.code == 201) {",
 									"    const jsonData = JSON.parse(responseBody);",
 									"    pm.collectionVariables.set(\"metadata_id\", jsonData.id);",
@@ -202,6 +236,11 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
 									"if (responseCode.code == 201) {",
 									"    const jsonData = JSON.parse(responseBody);",
 									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
@@ -237,6 +276,20 @@
 				},
 				{
 					"name": "Add phenopacket 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -268,6 +321,11 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
 									"if (responseCode.code == 201) {",
 									"    const jsonData = JSON.parse(responseBody);",
 									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
@@ -303,6 +361,20 @@
 				},
 				{
 					"name": "Add phenopacket 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -334,6 +406,11 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
 									"if (responseCode.code == 201) {",
 									"    const jsonData = JSON.parse(responseBody);",
 									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
@@ -369,6 +446,20 @@
 				},
 				{
 					"name": "Add phenopacket 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -400,6 +491,11 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
 									"if (responseCode.code == 201) {",
 									"    const jsonData = JSON.parse(responseBody);",
 									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
@@ -435,6 +531,20 @@
 				},
 				{
 					"name": "Add phenopacket 4",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -466,6 +576,11 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
 									"if (responseCode.code == 201) {",
 									"    const jsonData = JSON.parse(responseBody);",
 									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
@@ -501,6 +616,20 @@
 				},
 				{
 					"name": "Add phenopacket 5",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -532,6 +661,11 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
 									"if (responseCode.code == 201) {",
 									"    const jsonData = JSON.parse(responseBody);",
 									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
@@ -567,6 +701,20 @@
 				},
 				{
 					"name": "Add phenopacket 6",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -598,6 +746,11 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
 									"if (responseCode.code == 201) {",
 									"    const jsonData = JSON.parse(responseBody);",
 									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
@@ -633,6 +786,20 @@
 				},
 				{
 					"name": "Add phenopacket 7",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -664,6 +831,11 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
 									"if (responseCode.code == 201) {",
 									"    const jsonData = JSON.parse(responseBody);",
 									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
@@ -699,6 +871,20 @@
 				},
 				{
 					"name": "Add phenopacket 8",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -730,6 +916,11 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
 									"if (responseCode.code == 201) {",
 									"    const jsonData = JSON.parse(responseBody);",
 									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
@@ -765,6 +956,20 @@
 				},
 				{
 					"name": "Add phenopacket 9",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -796,6 +1001,11 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
 									"if (responseCode.code == 201) {",
 									"    const jsonData = JSON.parse(responseBody);",
 									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
@@ -831,6 +1041,20 @@
 				},
 				{
 					"name": "Add phenopacket 10",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -862,6 +1086,11 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
 									"if (responseCode.code == 201) {",
 									"    const jsonData = JSON.parse(responseBody);",
 									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
@@ -897,6 +1126,20 @@
 				},
 				{
 					"name": "Add phenopacket 11",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -928,6 +1171,11 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
 									"if (responseCode.code == 201) {",
 									"    const jsonData = JSON.parse(responseBody);",
 									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
@@ -963,12 +1211,26 @@
 				},
 				{
 					"name": "Add phenopacket 12",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"id\": \"{{$randomUUID}}\",\n  \"subject\": \"{{individual_id}}\",\n  \"meta_data\": {{metadata_id}},\n  \"table\": \"{{table_id}}\"\n}",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\",\n  \"subject\": \"{{individual_id}}\",\n  \"meta_data\": {{metadata_id}}\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1895,7 +2157,7 @@
 			]
 		},
 		{
-			"name": "[modify!] Applicant is authorized to get resource from Katsu",
+			"name": "Applicant is authorized to get resource from Katsu",
 			"item": [
 				{
 					"name": "Fetch applicant's permissions from REMS",
@@ -1923,9 +2185,6 @@
 							}
 						}
 					],
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"auth": {
 							"type": "apikey",
@@ -1950,15 +2209,6 @@
 								"value": "{{rems-owner-user-id}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
 							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/permissions/{{rems-applicant-user-id}}",
 							"host": [
@@ -1968,13 +2218,12 @@
 								"permissions",
 								"{{rems-applicant-user-id}}"
 							]
-						},
-						"description": "As of the following PR in cscfi/rems, the applicant should be able to fetch their own permissions: https://github.com/CSCfi/rems/pull/2649"
+						}
 					},
 					"response": []
 				},
 				{
-					"name": "(success) Get a resource from Katsu (ex. individual) as the applicant",
+					"name": "Get a resource from Katsu (ex. individual) as the applicant",
 					"event": [
 						{
 							"listen": "test",
@@ -1986,20 +2235,17 @@
 									"});",
 									"",
 									"const responseData = pm.response.json();",
+									"const results = responseData.results;",
 									"",
-									"// Below, put tests validating that the result returned indicates a successful, authorized return of the requested data.",
-									"// Some examples are provided.",
-									"",
-									"// ex. Test that only one result is returned",
-									"pm.test(\"Response contains exactly one result\", () => {",
-									"    pm.expect(responseData).to.have.lengthOf(1);",
+									"pm.test(\"Response contains exactly eleven results\", () => {",
+									"    pm.expect(results).to.have.lengthOf(11);",
 									"})",
 									"",
 									"// ex. Test that response values equal the expected values",
 									"pm.test(\"Response values satisfy expectations\", () => {",
-									"    pm.expect(responseData[0].id).to.eql(pm.collectionVariables.get(\"individual_id\"));",
-									"    // Sometimes you will need to cast things inside the eql() method, ex.:",
-									"    //      pm.expect(responseData[0].project_application_id).to.eql(Number(pm.collectionVariables.get(\"application_id\")));",
+									"    for (let i = 0; i < 11; i++) {",
+									"        pm.expect(results[i].id).not.eql(pm.collectionVariables.get(\"individual_id\"));",
+									"    }",
 									"});"
 								],
 								"type": "text/javascript"
@@ -2154,7 +2400,7 @@
 			]
 		},
 		{
-			"name": "[modify!] Applicant's access to resource is revoked in REMS",
+			"name": "Applicant's access to resource is revoked in REMS",
 			"item": [
 				{
 					"name": "Revoke applicant's access to resource in REMS",
@@ -2222,7 +2468,7 @@
 								"revoke"
 							]
 						},
-						"description": "This is a placeholder for a request to REMS that revokes the applicant's access to the resource.\nI haven't tested this request, and am not sure if /api/applications/revoke is the right endpoint to use to accomplish this; you should test and modify this request until it achieves the desired result."
+						"description": "This is a placeholder for a request to REMS that revokes the applicant's access to the resource."
 					},
 					"response": []
 				}
@@ -2249,7 +2495,7 @@
 			]
 		},
 		{
-			"name": "[modify!] Applicant is not authorized to get resource from Katsu",
+			"name": "Applicant is not authorized to get resource from Katsu",
 			"item": [
 				{
 					"name": "Fetch applicant's permissions from REMS",
@@ -2277,9 +2523,6 @@
 							}
 						}
 					],
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"auth": {
 							"type": "apikey",
@@ -2304,15 +2547,6 @@
 								"value": "{{rems-owner-user-id}}"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
 							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/permissions/{{rems-applicant-user-id}}",
 							"host": [
@@ -2322,24 +2556,28 @@
 								"permissions",
 								"{{rems-applicant-user-id}}"
 							]
-						},
-						"description": "As of the following PR in cscfi/rems, the applicant should be able to fetch their own permissions: https://github.com/CSCfi/rems/pull/2649"
+						}
 					},
 					"response": []
 				},
 				{
-					"name": "(forbidden) Get a resource from Katsu (ex. individual) as the applicant",
+					"name": "Get a resource from Katsu (ex. individual) as the applicant",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
 									"// Test that request succeeded",
-									"pm.test(\"Status code is 403\", function () {",
-									"    pm.response.to.have.status(403);",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
 									"});",
 									"",
-									"// Add some tests below here to verify that the payload does not contain any sensitive information"
+									"const responseData = pm.response.json();",
+									"const results = responseData.results;",
+									"",
+									"pm.test(\"Response contains no results\", () => {",
+									"    pm.expect(results).to.have.lengthOf(0);",
+									"})"
 								],
 								"type": "text/javascript"
 							}
