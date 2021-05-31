@@ -7,6 +7,7 @@ help ()
 {
    # Display Help
    echo "Initialize the authorizations for a dockerized service."
+   echo "FOR DEMO PURPOSES ONLY; DO NOT USE IN PRODUCTION."
    echo "Default behaviour is to assume that REMS is the target."
    echo
    echo "Usage:"
@@ -15,7 +16,7 @@ help ()
    echo "   USERID  The ID of the user to authorize."
    echo "Options:"
    echo "   -h      Display this help text"
-   echo "   -k      The api key to add. Default: 123abc"
+   echo "   -k      The api key to add. Default: abc123"
    echo "   -f      Docker-compose filename. Default: docker-compose.yaml"
    echo "   -s      Docker service container to exec the migration in. Default: rems"
    echo
@@ -62,6 +63,10 @@ case $service in
         docker-compose -f $composefile exec $service sh -c \
         'java -Drems.config=/rems/config/config.edn -jar rems.jar api-key add '$apikey' Testing'
         echo 'Attempted to add api-key '$apikey
+
+        docker-compose -f $composefile exec $service sh -c \
+        'java -Drems.config=/rems/config/config.edn -jar rems.jar api-key allow '$apikey' get '"'"'/api/permissions/.*'"'"''
+        echo 'Attempted to authorize api-key '$apikey' to GET '"'"'/api/permissions/.*'"'"''
 
         docker-compose -f $composefile exec $service sh -c \
         'java -Drems.config=/rems/config/config.edn -jar rems.jar grant-role owner '$user

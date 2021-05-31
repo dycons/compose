@@ -80,7 +80,7 @@ services:
       KEYCLOAK_USER: ${RP_KEYCLOAK_USER}
       KEYCLOAK_PASSWORD: ${RP_KEYCLOAK_PASSWORD}
       KEYCLOAK_IMPORT: "/imports/realm-export.json -Dkeycloak.profile.feature.upload_scripts=enabled"
-      REMS_CLIENT_ID: edf83af5-9964-427b-b70b-25d9a1bb5ff2
+      REMS_CLIENT_ID: ${REMS_CLIENT_ID}
       OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET}
     ports:
       - "3002:8080"

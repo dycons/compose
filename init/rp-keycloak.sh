@@ -150,7 +150,8 @@ done
 if ! command -v jq &> /dev/null
 then
     echo "jq could not be found"
-    echo "Please install jq"
+    echo "Please install jq, ex.:"
+    echo "      apt-get install jq"
     exit
 fi
 if ! command -v envsubst &> /dev/null
@@ -189,5 +190,3 @@ echo "OWNER_ID: " $OWNER_ID
 export APPLICANT_ID=$(_get_user applicant)
 echo "APPLICANT_ID: " $APPLICANT_ID
 echo
-
-# TODO document this script's existence and usage in README
