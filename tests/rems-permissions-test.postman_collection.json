@@ -1,0 +1,2832 @@
+{
+	"info": {
+		"_postman_id": "f17c8e2d-43fe-4c93-a0a4-dd8007f8ba20",
+		"name": "rems-permissions-test",
+		"description": "A collection of requests testing the REMS add-entitlements webhook, which is ingested by the Consents service to initialize ProjectConsents.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create resources in Katsu",
+			"item": [
+				{
+					"name": "Add project",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"if (responseCode.code == 201) {",
+									"    const jsonData = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"project_id\", jsonData.identifier);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"project_rems\",\n  \"description\": \"Project for REMS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/projects",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add dataset",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"if (responseCode.code == 201) {",
+									"    const jsonData = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"dataset_id\", jsonData.identifier);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"{{resource-title}}\",\n    \"data_use\": {\n        \"consent_code\": {\n            \"primary_category\": {\n                \"code\": \"GRU\"\n            },\n            \"secondary_categories\": [\n                {\n                    \"code\": \"GSO\"\n                }\n            ]\n        },\n        \"data_use_requirements\": [\n            {\n                \"code\": \"COL\"\n            },\n            {\n                \"code\": \"PUB\"\n            }\n        ]\n    },\n    \"project\": \"{{project_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/datasets",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"datasets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add table ownership",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"if (responseCode.code == 201) {",
+									"    const jsonData = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"table_id\", jsonData.table_id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"table_id\": \"{{$randomUUID}}\",\n  \"service_id\": \"service\",\n  \"dataset\": \"{{dataset_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/table_ownership",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"table_ownership"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add table",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ownership_record\": \"{{table_id}}\",\n  \"name\": \"table_rems\",\n  \"data_type\": \"phenopacket\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/tables",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"tables"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add metadata",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"if (responseCode.code == 201) {",
+									"    const jsonData = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"metadata_id\", jsonData.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"created_by\": \"postman\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/metadata",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"metadata"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add individual 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"if (responseCode.code == 201) {",
+									"    const jsonData = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/individuals",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"individuals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add phenopacket 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\",\n  \"subject\": \"{{individual_id}}\",\n  \"meta_data\": {{metadata_id}},\n  \"table\": \"{{table_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/phenopackets",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"phenopackets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add individual 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"if (responseCode.code == 201) {",
+									"    const jsonData = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/individuals",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"individuals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add phenopacket 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\",\n  \"subject\": \"{{individual_id}}\",\n  \"meta_data\": {{metadata_id}},\n  \"table\": \"{{table_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/phenopackets",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"phenopackets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add individual 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"if (responseCode.code == 201) {",
+									"    const jsonData = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/individuals",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"individuals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add phenopacket 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\",\n  \"subject\": \"{{individual_id}}\",\n  \"meta_data\": {{metadata_id}},\n  \"table\": \"{{table_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/phenopackets",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"phenopackets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add individual 4",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"if (responseCode.code == 201) {",
+									"    const jsonData = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/individuals",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"individuals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add phenopacket 4",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\",\n  \"subject\": \"{{individual_id}}\",\n  \"meta_data\": {{metadata_id}},\n  \"table\": \"{{table_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/phenopackets",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"phenopackets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add individual 5",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"if (responseCode.code == 201) {",
+									"    const jsonData = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/individuals",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"individuals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add phenopacket 5",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\",\n  \"subject\": \"{{individual_id}}\",\n  \"meta_data\": {{metadata_id}},\n  \"table\": \"{{table_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/phenopackets",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"phenopackets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add individual 6",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"if (responseCode.code == 201) {",
+									"    const jsonData = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/individuals",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"individuals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add phenopacket 6",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\",\n  \"subject\": \"{{individual_id}}\",\n  \"meta_data\": {{metadata_id}},\n  \"table\": \"{{table_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/phenopackets",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"phenopackets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add individual 7",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"if (responseCode.code == 201) {",
+									"    const jsonData = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/individuals",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"individuals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add phenopacket 7",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\",\n  \"subject\": \"{{individual_id}}\",\n  \"meta_data\": {{metadata_id}},\n  \"table\": \"{{table_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/phenopackets",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"phenopackets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add individual 8",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"if (responseCode.code == 201) {",
+									"    const jsonData = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/individuals",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"individuals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add phenopacket 8",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\",\n  \"subject\": \"{{individual_id}}\",\n  \"meta_data\": {{metadata_id}},\n  \"table\": \"{{table_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/phenopackets",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"phenopackets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add individual 9",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"if (responseCode.code == 201) {",
+									"    const jsonData = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/individuals",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"individuals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add phenopacket 9",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\",\n  \"subject\": \"{{individual_id}}\",\n  \"meta_data\": {{metadata_id}},\n  \"table\": \"{{table_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/phenopackets",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"phenopackets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add individual 10",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"if (responseCode.code == 201) {",
+									"    const jsonData = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/individuals",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"individuals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add phenopacket 10",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\",\n  \"subject\": \"{{individual_id}}\",\n  \"meta_data\": {{metadata_id}},\n  \"table\": \"{{table_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/phenopackets",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"phenopackets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add individual 11",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"if (responseCode.code == 201) {",
+									"    const jsonData = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/individuals",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"individuals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add phenopacket 11",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\",\n  \"subject\": \"{{individual_id}}\",\n  \"meta_data\": {{metadata_id}},\n  \"table\": \"{{table_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/phenopackets",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"phenopackets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add individual 12",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"if (responseCode.code == 201) {",
+									"    const jsonData = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"individual_id\", jsonData.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/individuals",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"individuals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add phenopacket 12",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$randomUUID}}\",\n  \"subject\": \"{{individual_id}}\",\n  \"meta_data\": {{metadata_id}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/phenopackets",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"phenopackets"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Create users in REMS",
+			"item": [
+				{
+					"name": "Add applying user to REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"value": "{{rems-owner-user-id}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userid\": \"{{rems-applicant-user-id}}\",\n  \"name\": \"applying user\",\n  \"email\": \"applicant email\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/users/create",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+							],
+							"path": [
+								"users",
+								"create"
+							]
+						},
+						"description": "In order to create a user in REMS, you must provide the user ID of a user with the owner role in the x-rems-user-id header.\nTherefore, at least one user must actually log in to REMS via the UI and then have the owner role assigned to them. After this is done, all other users may be created by POSTing to this endpoint."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create catalogue item for resource in REMS",
+			"item": [
+				{
+					"name": "Add organization to REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{rems-owner-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"archived\": true,\n  \"organization/id\": \"test-org\",\n  \"organization/short-name\": {\n    \"en\": \"A test organization\"\n  },\n  \"enabled\": true,\n  \"organization/owners\": [\n    {\n      \"userid\": \"{{rems-owner-user-id}}\"\n    }\n  ],\n  \"organization/name\": {\n    \"en\": \"This is a test organization\"\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/organizations/create",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+							],
+							"path": [
+								"organizations",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add form to REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Set the form_id param for subsequent requests",
+									"pm.collectionVariables.set(\"form_id\", responseData.id);",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{rems-owner-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"organization\": {\n    \"organization/id\": \"string\"\n  },\n  \"form/title\": \"test-form\",\n  \"form/fields\": [\n    {\n      \"field/title\": {\n        \"fi\": \"text in Finnish\",\n        \"en\": \"text in English\"\n      },\n      \"field/type\": \"description\",\n      \"field/optional\": true\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/forms/create",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+							],
+							"path": [
+								"forms",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add license to REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Set the license_id param for subsequent requests",
+									"pm.collectionVariables.set(\"license_id\", responseData.id);",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{rems-owner-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"licensetype\": \"attachment\",\n  \"organization\": {\n    \"organization/id\": \"string\"\n  },\n  \"localizations\": {\n    \"en\": {\n      \"title\": \"English title\",\n      \"textcontent\": \"English content\"\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/licenses/create",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+							],
+							"path": [
+								"licenses",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add resource to REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Set the resource_id param for subsequent requests",
+									"pm.collectionVariables.set(\"resource_id\", responseData.id);",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"value": "{{rems-owner-user-id}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"resid\": \"{{resource-title}}\",\n  \"organization\": {\n    \"organization/id\": \"string\"\n  },\n  \"licenses\": [\n    {{license_id}}\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/resources/create",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+							],
+							"path": [
+								"resources",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add workflow to REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Set the workflow_id param for subsequent requests",
+									"pm.collectionVariables.set(\"workflow_id\", responseData.id);",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{rems-owner-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"organization\": {\n    \"organization/id\": \"string\"\n  },\n  \"title\": \"string\",\n  \"type\": \"workflow/default\",\n  \"handlers\": [\n    \"{{rems-owner-user-id}}\"\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/workflows/create",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+							],
+							"path": [
+								"workflows",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add catalogue item to REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Set the catalog_item_id param for subsequent requests",
+									"pm.collectionVariables.set(\"catalog_item_id\", responseData.id);",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"value": "{{rems-owner-user-id}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"form\": {{form_id}},\n  \"resid\": {{resource_id}},\n  \"wfid\": {{workflow_id}},\n  \"organization\": {\n    \"organization/id\": \"string\"\n  },\n  \"localizations\": {\n    \"en\": {\n      \"title\": \"Title in English\",\n      \"infourl\": \"http://example.com\"\n    }\n  },\n  \"enabled\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/catalogue-items/create",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+							],
+							"path": [
+								"catalogue-items",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Apply to catalogue item in REMS",
+			"item": [
+				{
+					"name": "Apply to catalog-item in REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Set the application_id param for subsequent requests",
+									"pm.collectionVariables.set(\"application_id\", responseData['application-id']);",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{rems-applicant-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"catalogue-item-ids\": [\n    {{catalog_item_id}}\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/applications/create",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+							],
+							"path": [
+								"applications",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check new REMS application",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{rems-owner-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/applications/{{application_id}}/raw",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+							],
+							"path": [
+								"applications",
+								"{{application_id}}",
+								"raw"
+							]
+						},
+						"description": "This request is mainly for debugging if something goes wrong in application creation or submission."
+					},
+					"response": []
+				},
+				{
+					"name": "Accept licenses in REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{rems-applicant-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"application-id\": {{application_id}},\n  \"accepted-licenses\": [\n    {{license_id}}\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/applications/accept-licenses",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+							],
+							"path": [
+								"applications",
+								"accept-licenses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Submit application in REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{rems-applicant-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"application-id\": {{application_id}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/applications/submit",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+							],
+							"path": [
+								"applications",
+								"submit"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Approve application in REMS",
+			"item": [
+				{
+					"name": "Approve application in REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{rems-owner-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"application-id\": {{application_id}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/applications/approve",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+							],
+							"path": [
+								"applications",
+								"approve"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Applicant is authorized to get resource from Katsu",
+			"item": [
+				{
+					"name": "Fetch applicant's permissions from REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.ga4gh_passport_v1).to.be.an(\"array\");",
+									"});",
+									"",
+									"// Save the GA4GH Visa retrieved from REMS to a collection variable called applicant_rems_visa.",
+									"pm.collectionVariables.set(\"applicant_rems_visa\", JSON.stringify(responseData));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{rems-owner-user-id}}"
+							}
+						],
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/permissions/{{rems-applicant-user-id}}",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+							],
+							"path": [
+								"permissions",
+								"{{rems-applicant-user-id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a resource from Katsu (ex. individual) as the applicant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"const results = responseData.results;",
+									"",
+									"pm.test(\"Response contains exactly eleven results\", () => {",
+									"    pm.expect(results).to.have.lengthOf(11);",
+									"})",
+									"",
+									"// ex. Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    for (let i = 0; i < 11; i++) {",
+									"        pm.expect(results[i].id).not.eql(pm.collectionVariables.get(\"individual_id\"));",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-CANDIG-EXT-REMS",
+								"type": "text",
+								"value": "{{applicant_rems_visa}}"
+							}
+						],
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/individuals",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"individuals"
+							]
+						},
+						"description": "This is a placeholder for requests to Katsu made by the applicant. The Headers should include the X-CANDIG-EXT-REMS header, containing the applicants Visa from the REMS /api/permissions endpoint."
+					},
+					"response": [
+						{
+							"name": "Participant not found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/participants/:study_identifier/project_consents",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"participants",
+										":study_identifier",
+										"project_consents"
+									],
+									"variable": [
+										{
+											"key": "study_identifier"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"code\": \"<integer>\",\n \"message\": \"<string>\"\n}"
+						},
+						{
+							"name": "Internal error",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/participants/:study_identifier/project_consents",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"participants",
+										":study_identifier",
+										"project_consents"
+									],
+									"variable": [
+										{
+											"key": "study_identifier"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"code\": \"<integer>\",\n \"message\": \"<string>\"\n}"
+						},
+						{
+							"name": "Return all affiliated project consents",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/participants/:study_identifier/project_consents",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"participants",
+										":study_identifier",
+										"project_consents"
+									],
+									"variable": [
+										{
+											"key": "study_identifier"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"application_id\": \"<uuid>\",\n \"genetic_consent\": false,\n \"clinical_consent\": false\n}"
+						}
+					]
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Applicant's access to resource is revoked in REMS",
+			"item": [
+				{
+					"name": "Revoke applicant's access to resource in REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{rems-owner-user-id}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"application-id\": {{application_id}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/applications/revoke",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+							],
+							"path": [
+								"applications",
+								"revoke"
+							]
+						},
+						"description": "This is a placeholder for a request to REMS that revokes the applicant's access to the resource."
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Applicant is not authorized to get resource from Katsu",
+			"item": [
+				{
+					"name": "Fetch applicant's permissions from REMS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"",
+									"// Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    pm.expect(responseData.ga4gh_passport_v1).to.be.an(\"array\");",
+									"});",
+									"",
+									"// Save the GA4GH Visa retrieved from REMS to a collection variable called applicant_rems_visa.",
+									"pm.collectionVariables.set(\"applicant_rems_visa\", JSON.stringify(responseData));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{rems-api-key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-rems-api-key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-rems-user-id",
+								"type": "text",
+								"value": "{{rems-owner-user-id}}"
+							}
+						],
+						"url": {
+							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/permissions/{{rems-applicant-user-id}}",
+							"host": [
+								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+							],
+							"path": [
+								"permissions",
+								"{{rems-applicant-user-id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a resource from Katsu (ex. individual) as the applicant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"const results = responseData.results;",
+									"",
+									"pm.test(\"Response contains no results\", () => {",
+									"    pm.expect(results).to.have.lengthOf(0);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-CANDIG-EXT-REMS",
+								"type": "text",
+								"value": "{{applicant_rems_visa}}"
+							}
+						],
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/individuals",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"individuals"
+							]
+						},
+						"description": "This is a placeholder for requests to Katsu made by the applicant. The Headers should include the X-CANDIG-EXT-REMS header, containing the applicants Visa from the REMS /api/permissions endpoint."
+					},
+					"response": [
+						{
+							"name": "Internal error",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/participants/:study_identifier/project_consents",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"participants",
+										":study_identifier",
+										"project_consents"
+									],
+									"variable": [
+										{
+											"key": "study_identifier"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"code\": \"<integer>\",\n \"message\": \"<string>\"\n}"
+						},
+						{
+							"name": "Return all affiliated project consents",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/participants/:study_identifier/project_consents",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"participants",
+										":study_identifier",
+										"project_consents"
+									],
+									"variable": [
+										{
+											"key": "study_identifier"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"application_id\": \"<uuid>\",\n \"genetic_consent\": false,\n \"clinical_consent\": false\n}"
+						},
+						{
+							"name": "Participant not found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/participants/:study_identifier/project_consents",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"participants",
+										":study_identifier",
+										"project_consents"
+									],
+									"variable": [
+										{
+											"key": "study_identifier"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"code\": \"<integer>\",\n \"message\": \"<string>\"\n}"
+						}
+					]
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "rems_scheme",
+			"value": "http://"
+		},
+		{
+			"key": "rems_host",
+			"value": "localhost:3001"
+		},
+		{
+			"key": "rems_base_path",
+			"value": "/api"
+		},
+		{
+			"key": "katsu_scheme",
+			"value": "http://"
+		},
+		{
+			"key": "katsu_host",
+			"value": "localhost:8000"
+		},
+		{
+			"key": "katsu_base_path",
+			"value": "/api"
+		},
+		{
+			"key": "individual_id",
+			"value": ""
+		},
+		{
+			"key": "organization_id",
+			"value": "test-org"
+		},
+		{
+			"key": "form_id",
+			"value": ""
+		},
+		{
+			"key": "license_id",
+			"value": ""
+		},
+		{
+			"key": "resource_id",
+			"value": ""
+		},
+		{
+			"key": "workflow_id",
+			"value": ""
+		},
+		{
+			"key": "catalog_item_id",
+			"value": ""
+		},
+		{
+			"key": "application_id",
+			"value": ""
+		},
+		{
+			"key": "applicant_rems_visa",
+			"value": ""
+		},
+		{
+			"key": "project_id",
+			"value": ""
+		},
+		{
+			"key": "dataset_id",
+			"value": ""
+		},
+		{
+			"key": "table_id",
+			"value": ""
+		},
+		{
+			"key": "metadata_id",
+			"value": ""
+		}
+	]
+}
