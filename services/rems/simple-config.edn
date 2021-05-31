@@ -4,6 +4,11 @@
  :authentication :oidc
  :public-url "http://localhost:3001/"
 
+ :enable-permissions-api true
+
+ :ga4gh-visa-private-key "/rems/private_key"
+ :ga4gh-visa-public-key "/rems/public_key"
+
  :oidc-metadata-url "http://rp-keycloak:8080/auth/realms/dycons-researcher-idp/.well-known/openid-configuration"
 
  :oidc-client-id "rems-client"
