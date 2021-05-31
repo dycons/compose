@@ -6,24 +6,27 @@ DyCons server configuration and deployment
   - [Table of Contents](#table-of-contents)
   - [Setting up Keycloak for testing:](#setting-up-keycloak-for-testing)
   - [Participant Portal + Participant IdP](#participant-portal--participant-idp)
-  - [Researcher Portal + Researcher IdP](#researcher-portal--researcher-idp)
+  - [Researcher Portal + Researcher IdP + Katsu + REMS + OPA](#researcher-portal--researcher-idp--katsu--rems--opa)
   - [REMS + Researcher IdP](#rems--researcher-idp)
 
 ## Setting up Keycloak for testing:
 
-Setup expects the following reposto be available on the development/test machine:
+Setup expects the following repos to be available on the development/test machine:
 - [participant-portal](https://github.com/dycons/participant-portal)
 - [researcher-portal](https://github.com/dycons/researcher-portal)
 - [rems](https://github.com/CSCfi/rems)
 - [consents](https://github.com/dycons/consents)
 - [relay](https://github.com/dycons/relay)
+- [candigv2_opa](https://github.com/CanDIG/candigv2_opa)
 
 To set these up at the paths specified in this repo's `.env` file, you could run the following snippet:
 ```
 git clone https://github.com/dycons/participant-portal.git ../participant-portal && \
 git clone https://github.com/dycons/researcher-portal.git ../researcher-portal && \
 git clone https://github.com/CSCfi/rems.git ../rems && \
-git clone https://github.com:dycons/relay.git ../relay
+git clone https://github.com/dycons/consents.git ../consents && \
+git clone https://github.com/dycons/relay.git ../relay && \
+git clone https://github.com/CanDIG/candigv2_opa.git ../candigv2_opa
 ```
 
 **TODO** - Turn the following setup process into an automated step on startup.
@@ -52,43 +55,13 @@ git clone https://github.com:dycons/relay.git ../relay
       2. Run `yarn start` to compile the app.
       3. Continue development on your machine - changes will be mapped to the volume inside the container and reflected at http://127.0.0.1:3002
 
-## Researcher Portal + Researcher IdP + Katsu
-1. First make sure the services are running via `docker-compose up rp-keycloak katsu`.
-2. **Add test User**:
-   1. To add a test user (username: `applicant`, password: `applicant`) to rp-keycloak, run: `./init/rp-keycloak.sh`
-3. **Add sample Katsu data**:
-   1. To add sample data to Katsu, run: `docker exec -it -w /app/chord_metadata_service/scripts katsu python ingest.py`.
-4. **Testing** - Now it's time to test our setup by using the bundled front end:
-   1. Boot up the React frontend by running `docker-compose up rp-react`.
-   2. Start by going to http://127.0.0.1:3004/.
-   3. Click on the "Log In" button and you should be redirected to the Keycloak login screen.
-   4. Access the account using `applicant`/`applicant`. You'll be redirected back to the React frontend.
-   5. ** For active development **
-      1. Instead of step 1, run: `docker-compose run --rm --entrypoint sh --service-port rp-react`. This will log you into the application.
-      2. Run `npm start` to compile the app.
-      3. Continue development on your machine - changes will be mapped to the volume inside the container and reflected at http://127.0.0.1:3004/.
-
-## REMS + Researcher IdP
-
-1. (Optional) **Build REMS instead of pulling the image**:
-   * **Note**: due to limitations in REMS' repository and docker setup, it is currently necessary to build the rems jar locally. Additional reading is available [here](https://github.com/CSCfi/rems/blob/master/docs/installing-upgrading.md#option-2-build-rems-image-locally).
-
-   1. Install [Leiningen](https://leiningen.org/). Use the official instructions, or your preferred [package manager](https://github.com/technomancy/leiningen/wiki/Packaging) (for example, `brew install leiningen` or `apt-get install leiningen`)
-   2. Run `lein uberjar` in the `rems` directory to build the rems jar locally.
-   3. Modify `docker-compose.yaml` to build the container instead of pulling the CSCFI REMS image by removing the `image` param and adding build instructions:
-      ```
-      rems:
-         build:
-            context: ${REMS_DIR}
-            dockerfile: Dockerfile
-      ```
-   4. Run `docker-compose build rems` from the `compose` directory to build the dockerfile, which will package the jar you just built.
-2. **Migrate and seed REMS**:
-   1. Run `./init/migrate.sh rems` to prepare the database and migrate the required tables.
-   2. (Optional) Run `docker-compose run --rm -e CMD="test-data" rems` to populate REMS with test data.
-   3. REMS should now be ready for use.
-3. Boot up the researcher keycloak instance by running `docker-compose up rp-keycloak`
-4. **Prepare Keycloak**:
+## Researcher Portal + Researcher IdP + Katsu + REMS + OPA
+1. **Start up Researcher IdP**:
+   1. Run `docker-compose up rp-keycloak`.
+2. **Start up Katsu and OPA**:
+   1. Follow the steps [here](https://docs.github.com/en/packages/guides/pushing-and-pulling-docker-images#authenticating-to-github-container-registry) to authenticate to the GitHub Container Registry.
+   2. Run `docker-compose up katsu`.
+3. **Prepare Keycloak**:
    1. To prepare the keycloak for use with rems, run: `. ./init/rp-keycloak.sh -e`. This will accomplish the following:
       1. Create a generic `.env` file from the `.default.env` template provided, complete with the REMS client secret from keycloak.
       2. Add two test users
@@ -98,11 +71,21 @@ git clone https://github.com:dycons/relay.git ../relay
          - REMS_CLIENT_SECRET
          - OWNER_ID
          - APPLICANT_ID
-5. **Testing in the browser**:
-   1. Navigate to REMS at http://localhost:3001/.
-   2. Click on the "Login" button to be redirected to your keycloak instance.
-   3. Access the account using `applicant`/`applicant`. You should be authenticated and redirected back to REMS.
-6. *(Optional)* **Testing the API**:
+4. **Add Sample Katsu Data**:
+   1. To add sample data to Katsu, run: `docker exec -it -w /app/chord_metadata_service/scripts katsu python ingest.py`.
+5. **Add Authorization Rules to OPA**:
+   1. Run `./services/opa/opa_initialize.sh`.
+6. **Migrate and seed REMS**:
+   1. Run `./init/migrate.sh rems` to prepare the database and migrate the required tables.
+   2. (Optional) Run `docker-compose run --rm -e CMD="test-data" rems` to populate REMS with test data.
+   3. REMS should now be ready for use. Run `docker-compose up rems`.
+7. **Log In to REMS**:
+   1. Navigate to http://127.0.0.1:3001.
+   2. Click "Login".
+   3. Login using the username and password: `owner` / `owner`.
+   4. In the top right, click "Sign out".
+   5. REMS can be made aware of any other users via either the `/users/create` endpoint, or by logging in as that user. To logout of REMS via the `rp-keycloak`, as the keycloak `admin`, navigate to `Sessions` > `Logout All` via the navbar on the left.
+8. **Using the REMS API**:
    You can test the REMS API by submitting requests through the instance's [Swagger UI](http://localhost:3001/swagger-ui/index.html), or by running requests from the [Postman collection and test data](https://github.com/dycons/compose/tree/develop/tests). For the latter option, testing the API outside of the browser will require you to include some authorization information in the request headers.
    1. **Prepare credentials**: Provide REMS with an API key **and** grant your user the `owner` role by running `./init/authorize.sh USERID [options]`. By default, the API key set by this script is `abc123`, matching the API key in the Postman collection, but you can optionally set a custom key.
       - The USERID is output by the `init/rp-keycloak.sh` script used to prepare keycloak. If you sourced the script, you can use the `$OWNER_ID` and `$APPLICANT_ID` environment variables in your shell.
@@ -110,6 +93,15 @@ git clone https://github.com:dycons/relay.git ../relay
    3. Add headers to your requests containing the following key-value pairs:
       - `x-rems-api-key`: The API key to use for authorizing your call. Must be known to REMS.
       - `x-rems-user-id`: The ID of your user in REMS, as set by Keycloak (ex. `$OWNER_ID`)
+9. **Using the Researcher-Portal frontend** - Now it's time to test our setup by using the bundled front end:
+   1. Boot up the React frontend by running `docker-compose up rp-react`.
+   2. Start by going to http://127.0.0.1:3004/.
+   3. Click on the "Log In" button and you should be redirected to the Keycloak login screen.
+   4. Access the account using `applicant`/`applicant`. You'll be redirected back to the React frontend.
+   5. ** For active development **
+      1. Instead of step 1, run: `docker-compose run --rm --entrypoint sh --service-port rp-react`. This will log you into the application.
+      2. Run `npm start` to compile the app.
+      3. Continue development on your machine - changes will be mapped to the volume inside the container and reflected at http://127.0.0.1:3004/.
 
 ### REMS + Consents
 To push new `entitlements` to the Consents service, uncomment the following line in `simple-config.edn` prior to running the REMS container:
@@ -124,4 +116,4 @@ To push new `entitlements` to the Consents service, uncomment the following line
 
 ## Key Relay Service
 1. **Run** the Relay sevrice with `docker-compose up relay`
-2. (Optional) **Test** the Relay service by running the Postman collection at `tests/key-relay-service.postman_collection.json`
+2. (Optional) **Test** the Relay service by running the Postman collection at `../relay/tests/key-relay-service.postman_collection.json`
