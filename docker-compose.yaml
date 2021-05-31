@@ -135,6 +135,8 @@ services:
       - ${RELAY_DIR}:/build
       - /build/bin/
     entrypoint: ["sh", "./init.sh"]
+    environment:
+      SHARED_KEY: ${SHARED_KEY}
 
   opa:
     image: openpolicyagent/opa:latest
