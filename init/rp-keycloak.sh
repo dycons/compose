@@ -163,6 +163,8 @@ then
 fi
 
 # Run keycloak-preparing script
+mkdir -p tmp
+
 echo "Getting the REMS client secret from Keycloak..."
 export REMS_CLIENT_SECRET=$(_get_secret)
 echo
