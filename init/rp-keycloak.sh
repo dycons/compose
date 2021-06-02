@@ -15,7 +15,6 @@ help () {
    echo "Prepare the rp-keycloak for testing REMS, including exchanging client secrets and creating the following test users:"
    echo "   owner (uname: owner, pass: owner)"
    echo "   applicant (uname: applicant, pass: applicant)"
-   echo "Note that the rp-keycloak container is restarted during the execution of this script."
    echo
    echo "Script dependencies: jq, gnu_gettext (ie. gettext_base)"
    echo "Script assumes that dycons-researcher-idp realm has already been imported into rp-keycloak. Set the following environment variable to do so:"
@@ -30,7 +29,8 @@ help () {
    echo "   ./init/migrate.sh [options]"
    echo "Options:"
    echo "   -h      Display this help text"
-   echo "   -e      Hard-reset the .env file, identical to running: cp .default.env .env"
+   echo "   -e      Hard-reset the .env file, identical to running: cp .default.env .env && ./init/rp-keycloak.sh"
+   echo "           DO NOT USE -e IF SOURCING THIS SCRIPT! Instead run: cp .default.env .env && . ./init/rp-keycloak.sh"
    echo
 }
 
@@ -80,8 +80,8 @@ _set_secret () {
             echo 'Unable to substitute the value of ${REMS_CLIENT_SECRET} into the .env file.'
             echo 'Please do so manually, or rerun this script after adding the reference to the .env file.'
             echo 'ex. To reset the .env file to its default state, run either of the following commands:'
-            echo '  ./init/rp-keycloak.sh -e'
-            echo '  cp .default.env .env'
+            echo 'When not sourcing the script:  ./init/rp-keycloak.sh -e'
+            echo 'When sourcing the script:  cp .default.env .env && . ./init/rp-keycloak.sh'
             return 1
             ;;
         *)
@@ -89,8 +89,8 @@ _set_secret () {
             echo 'Unable to substitute the value of ${REMS_CLIENT_SECRET} into the .env file.'
             echo 'Please do so manually, or rerun this script after adding the reference to the .env file.'
             echo 'ex. To reset the .env file to its default state, run either of the following commands:'
-            echo '  ./init/rp-keycloak.sh -e'
-            echo '  cp .default.env .env'
+            echo 'When not sourcing the script:  ./init/rp-keycloak.sh -e'
+            echo 'When sourcing the script:  cp .default.env .env && . ./init/rp-keycloak.sh'
             return 2
             ;;
     esac
@@ -98,15 +98,14 @@ _set_secret () {
 
 
 # Add test users: owner (password: owner), applicant (password: applicant)
-# Requires restarting the keycloak container.
 _add_users () {
-    echo "Adding test users to keycloak: owner, applicant"
     docker-compose exec rp-keycloak sh -c \
     '/opt/jboss/keycloak/bin/kcadm.sh config credentials --server http://localhost:8080/auth \
     --realm master --user $KEYCLOAK_USER --password $KEYCLOAK_PASSWORD &&\
-    /opt/jboss/keycloak/bin/add-user-keycloak.sh -u owner -p owner -r dycons-researcher-idp &&\
-    /opt/jboss/keycloak/bin/add-user-keycloak.sh -u applicant -p applicant -r dycons-researcher-idp'
-    docker restart compose_rp-keycloak_1
+    /opt/jboss/keycloak/bin/kcadm.sh create users -r dycons-researcher-idp -s username=owner -s enabled=true &&\
+    /opt/jboss/keycloak/bin/kcadm.sh set-password -r dycons-researcher-idp --username owner --new-password owner &&\
+    /opt/jboss/keycloak/bin/kcadm.sh create users -r dycons-researcher-idp -s username=applicant -s enabled=true &&\
+    /opt/jboss/keycloak/bin/kcadm.sh set-password -r dycons-researcher-idp --username applicant --new-password applicant'
 }
 
 
@@ -152,18 +151,30 @@ then
     echo "jq could not be found"
     echo "Please install jq, ex.:"
     echo "      apt-get install jq"
-    exit
+    exit 1
 fi
 if ! command -v envsubst &> /dev/null
 then
     echo "envsubst could not be found"
     echo "Please install gnu_gettext, ex.:"
     echo "      apt-get install gettext-base"
-    exit
+    exit 1
 fi
 
-# Run keycloak-preparing script
+# Create required local tmp file
 mkdir -p tmp
+if [[ ! -d tmp && -f tmp ]]; then
+    echo "ERROR: tmp folder in current host directory is a file instead of a directory."
+    echo "Please replace with tmp directory and rerun script"
+    exit 1
+elif [[ ! -d tmp ]]; then
+    echo "ERROR: no tmp folder in current host directory."
+    echo "Please create tmp directory and rerun script"
+    exit 1
+fi
+
+
+# Run keycloak-preparing script
 
 echo "Getting the REMS client secret from Keycloak..."
 export REMS_CLIENT_SECRET=$(_get_secret)
@@ -181,7 +192,6 @@ echo
 echo "Creating the following users into keycloak:"
 echo "   owner (uname: owner, pass: owner)"
 echo "   applicant (uname: applicant, pass: applicant)"
-echo "rp-keycloak will be restarted..."
 _add_users
 echo "Users have been added to keycloak."
 echo
