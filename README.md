@@ -4,12 +4,16 @@ DyCons server configuration and deployment
 ## Table of Contents
 - [compose](#compose)
   - [Table of Contents](#table-of-contents)
-  - [Setting up Keycloak for testing:](#setting-up-keycloak-for-testing)
-  - [Participant Portal + Participant IdP](#participant-portal--participant-idp)
-  - [Researcher Portal + Researcher IdP + Katsu + REMS + OPA](#researcher-portal--researcher-idp--katsu--rems--opa)
-  - [REMS + Researcher IdP](#rems--researcher-idp)
+  - [Repository Superstructure:](#repository-superstructure)
+  - [Katsu + OPA](#katsu-opa)
+  - [Participant Portal + Participant IdP](#participant-portal-participant-idp)
+  - [Researcher Portal + Researcher IdP + Katsu + REMS + OPA](#researcher-portal-researcher-idp-katsu-rems-opa)
+    - [REMS + Consents](#rems-consents)
+  - [Consents](#consents)
+  - [Key Relay Service](#key-relay-service)
 
-## Setting up Keycloak for testing:
+## Repository Superstructure:
+[Diagram](https://drive.google.com/file/d/1nuDjgWV1jvaqV5nd4O-_Fzx6J7kEWH3f/view?usp=sharing) describing the current milestone for the DyCons stack and core workflows (called `demo1`).
 
 Setup expects the following repos to be available on the development/test machine:
 - [participant-portal](https://github.com/dycons/participant-portal)
@@ -19,7 +23,7 @@ Setup expects the following repos to be available on the development/test machin
 - [relay](https://github.com/dycons/relay)
 - [candigv2_opa](https://github.com/CanDIG/candigv2_opa)
 
-To set these up at the paths specified in this repo's `.env` file, you could run the following snippet:
+To set these up at the paths specified in this repo's `.env` file, you could run the following snippet from the `compose` root folder:
 ```
 git clone https://github.com/dycons/participant-portal.git ../participant-portal && \
 git clone https://github.com/dycons/researcher-portal.git ../researcher-portal && \
@@ -29,7 +33,19 @@ git clone https://github.com/dycons/relay.git ../relay && \
 git clone https://github.com/CanDIG/candigv2_opa.git ../candigv2_opa
 ```
 
-**TODO** - Turn the following setup process into an automated step on startup.
+## Katsu + OPA
+[Services diagram](https://drive.google.com/file/d/1QyDr21pLXR98w4Al1IG9MhWah6nFYlHZ/view?usp=sharing) describing the OPA-powered authorization of Katsu.
+
+[Sequence diagram](https://github.com/dycons/design/blob/develop/demo1/diagrams/researcher_query.md) describing the process of authorizing a researcher's request to Katsu via the DyCons `researcher-portal`.
+
+Spin up these components as follows:
+1. **Start up Katsu and OPA**:
+   1. Follow the steps [here](https://docs.github.com/en/packages/guides/pushing-and-pulling-docker-images#authenticating-to-github-container-registry) to authenticate to the GitHub Container Registry. This is necessary for pulling the `katsu` image.
+   2. Run `docker-compose up katsu`
+2. (Optional) **Add Sample Katsu Data**:
+   1. To add sample data to Katsu, run: `docker exec -it -w /app/chord_metadata_service/scripts katsu python ingest.py`
+3. **Add Authorization Rules to OPA**:
+   1. Run `./services/opa/opa_initialize.sh`
 
 ## Participant Portal + Participant IdP
 1. First make sure the keycloak service is running via `docker-compose up pp-keycloak`
