@@ -12,8 +12,8 @@ DyCons server configuration and deployment
   - [Consents](#consents)
   - [Key Relay Service](#key-relay-service)
 
-## Repository Superstructure:
-[Diagram](https://drive.google.com/file/d/1nuDjgWV1jvaqV5nd4O-_Fzx6J7kEWH3f/view?usp=sharing) describing the current milestone for the DyCons stack and core workflows (called `demo1`).
+## Repository Superstructure
+[Services diagram](https://drive.google.com/file/d/1nuDjgWV1jvaqV5nd4O-_Fzx6J7kEWH3f/view?usp=sharing) describing the current milestone for the DyCons stack and core workflows (called `demo1`).
 
 Setup expects the following repos to be available on the development/test machine:
 - [participant-portal](https://github.com/dycons/participant-portal)
