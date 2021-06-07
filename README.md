@@ -45,7 +45,7 @@ Spin up these components as follows:
 2. (Optional) **Add Sample Katsu Data**:
    1. To add sample data to Katsu, run: `docker exec -it -w /app/chord_metadata_service/scripts katsu python ingest.py`
 3. **Add Authorization Rules to OPA**:
-   1. Run `./services/opa/opa_initialize.sh`
+   1. Run `./init/opa.sh`
 
 ## Participant Portal + Participant IdP
 1. First make sure the keycloak service is running via `docker-compose up pp-keycloak`
@@ -90,7 +90,7 @@ Spin up these components as follows:
 4. **Add Sample Katsu Data**:
    1. To add sample data to Katsu, run: `docker exec -it -w /app/chord_metadata_service/scripts katsu python ingest.py`.
 5. **Add Authorization Rules to OPA**:
-   1. Run `./services/opa/opa_initialize.sh`.
+   1. Run `./init/opa.sh`.
 6. **Migrate and seed REMS**:
    1. Run `./init/migrate.sh rems` to prepare the database and migrate the required tables.
    2. (Optional) Run `docker-compose run --rm -e CMD="test-data" rems` to populate REMS with test data.
