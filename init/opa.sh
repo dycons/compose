@@ -26,7 +26,7 @@ help () {
 path="../candigv2_opa"
 
 # Process options
-while getopts ":hp" opt; do
+while getopts ":hp:" opt; do
   case $opt in
     h)  help
         exit
@@ -77,7 +77,7 @@ then
     echo "Error: Failed to connect to localhost:8181/v1/policies/ga4ghPassport"
     echo "Please ensure the OPA service is running and rerun the script."
     exit 1
-elif [[ $HTTP_STATUS_CODE -ne 204 ]]
+elif [[ $HTTP_STATUS_CODE -ne 200 ]]
 then
     echo "Error: Failed to ingest authorization policies into OPA"
     echo "Please ensure $path/passport.rego has not been modified and rerun the script."
