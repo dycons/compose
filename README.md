@@ -75,10 +75,10 @@ Spin up these components as follows:
 1. **Start up Researcher IdP**:
    1. Run `docker-compose up rp-keycloak`.
 2. **Start up Katsu and OPA**:
-   1. Follow the steps [here](https://docs.github.com/en/packages/guides/pushing-and-pulling-docker-images#authenticating-to-github-container-registry) to authenticate to the GitHub Container Registry.
+   1. Follow the steps [here](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry) to authenticate to the GitHub Container Registry.
    2. Run `docker-compose up katsu`.
 3. **Prepare Keycloak**:
-   1. To prepare the keycloak for use with rems, run: `. ./init/rp-keycloak.sh -e`. This will accomplish the following:
+   1. To prepare the keycloak for use with REMS, run: `cp .default.env .env && . ./init/rp-keycloak.sh`. This will accomplish the following:
       1. Create a generic `.env` file from the `.default.env` template provided, complete with the REMS client secret from keycloak.
       2. Add two test users
          - username: `applicant`, password: `applicant`
@@ -90,7 +90,7 @@ Spin up these components as follows:
 4. **Add Sample Katsu Data**:
    1. To add sample data to Katsu, run: `docker exec -it -w /app/chord_metadata_service/scripts katsu python ingest.py`.
 5. **Add Authorization Rules to OPA**:
-   1. Run `./init/opa.sh`.
+   1. Run `./init/opa.sh` to add authorization policies and data to OPA.
 6. **Migrate and seed REMS**:
    1. Run `./init/migrate.sh rems` to prepare the database and migrate the required tables.
    2. (Optional) Run `docker-compose run --rm -e CMD="test-data" rems` to populate REMS with test data.
