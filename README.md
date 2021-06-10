@@ -78,12 +78,11 @@ Spin up these components as follows:
 2. **Start up Researcher IdP**:
    1. Run `docker-compose up rp-keycloak`.
 3. **Prepare Keycloak**:
-   1. To prepare the keycloak for use with rems, run: `. ./init/rp-keycloak.sh -e`. This will accomplish the following:
-      1. Create a generic `.env` file from the `.default.env` template provided, complete with the REMS client secret from keycloak.
-      2. Add two test users
+   1. To prepare the keycloak for use with rems, run: `. ./init/rp-keycloak.sh`. This will accomplish the following:
+      1. Add two test users
          - username: `applicant`, password: `applicant`
          - username: `owner`, password: `owner`
-      3. Export the following environment variables to your shell, for use in authorization. Skip sourcing the script if this is not desired.
+      2. Export the following environment variables to your shell, for use in authorization. Skip sourcing the script if this is not desired.
          - REMS_CLIENT_SECRET
          - OWNER_ID
          - APPLICANT_ID

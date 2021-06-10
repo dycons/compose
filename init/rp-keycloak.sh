@@ -19,6 +19,10 @@ help () {
    echo "Script dependencies: jq, gnu_gettext (ie. gettext_base)"
    echo "Script assumes that dycons-researcher-idp realm has already been imported into rp-keycloak. Set the following environment variable to do so:"
    echo '   KEYCLOAK_IMPORT: "/imports/realm-export.json -Dkeycloak.profile.feature.upload_scripts=enabled"'
+   echo 'Script can only inject the OIDC REMS_CLIENT_SECRET into a .env file if .env contains the following line:'
+   echo '   OIDC_CLIENT_SECRET=${REMS_CLIENT_SECRET}'
+   echo 'Can run the following command to reset the the .env file to its default values, then run this script:'
+   echo '   cp .default.env .env && . ./init/rp-keycloak.sh'
    echo
    echo "If desireable, source this script (ie. run: . ./init/keycloak.sh) to have the script set the following environment variables in the shell:"
    echo "   REMS_CLIENT_SECRET"
@@ -29,8 +33,6 @@ help () {
    echo "   ./init/migrate.sh [options]"
    echo "Options:"
    echo "   -h      Display this help text"
-   echo "   -e      Hard-reset the .env file, identical to running: cp .default.env .env && ./init/rp-keycloak.sh"
-   echo "           DO NOT USE -e IF SOURCING THIS SCRIPT! Instead run: cp .default.env .env && . ./init/rp-keycloak.sh"
    echo
 }
 
@@ -80,8 +82,8 @@ _set_secret () {
             echo 'Unable to substitute the value of ${REMS_CLIENT_SECRET} into the .env file.'
             echo 'Please do so manually, or rerun this script after adding the reference to the .env file.'
             echo 'ex. To reset the .env file to its default state, run either of the following commands:'
-            echo 'When not sourcing the script:  ./init/rp-keycloak.sh -e'
-            echo 'When sourcing the script:  cp .default.env .env && . ./init/rp-keycloak.sh'
+            echo 'When not sourcing this script:  cp .default.env .env && ./init/rp-keycloak.sh'
+            echo 'When sourcing this script:      cp .default.env .env && . ./init/rp-keycloak.sh'
             return 1
             ;;
         *)
@@ -89,8 +91,8 @@ _set_secret () {
             echo 'Unable to substitute the value of ${REMS_CLIENT_SECRET} into the .env file.'
             echo 'Please do so manually, or rerun this script after adding the reference to the .env file.'
             echo 'ex. To reset the .env file to its default state, run either of the following commands:'
-            echo 'When not sourcing the script:  ./init/rp-keycloak.sh -e'
-            echo 'When sourcing the script:  cp .default.env .env && . ./init/rp-keycloak.sh'
+            echo 'When not sourcing this script:  cp .default.env .env && ./init/rp-keycloak.sh'
+            echo 'When sourcing this script:      cp .default.env .env && . ./init/rp-keycloak.sh'
             return 2
             ;;
     esac
@@ -133,12 +135,10 @@ _get_user () {
 ################################# Script start
 
 # Process options
-while getopts ":he" opt; do
+while getopts ":h" opt; do
   case $opt in
     h)  help
         exit
-        ;;
-    e)  cp .default.env .env
         ;;
     \?) echo "Invalid option -$OPTARG" >&2
         ;;
