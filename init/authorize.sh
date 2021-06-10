@@ -39,7 +39,7 @@ apikey="abc123"
 
 
 # Optionally overwrite docker compose filename or service to migrate
-while getopts ":hf:s:" opt; do
+while getopts ":hk:f:s:" opt; do
   case $opt in
     h)  help
         exit
@@ -57,16 +57,13 @@ done
 
 echo "composefile: " $composefile
 echo "service: " $service
+echo "apikey: " $apikey
 
 case $service in
     rems)
         docker-compose -f $composefile exec $service sh -c \
         'java -Drems.config=/rems/config/config.edn -jar rems.jar api-key add '$apikey' Testing'
         echo 'Attempted to add api-key '$apikey
-
-        docker-compose -f $composefile exec $service sh -c \
-        'java -Drems.config=/rems/config/config.edn -jar rems.jar api-key allow '$apikey' get '"'"'/api/permissions/.*'"'"''
-        echo 'Attempted to authorize api-key '$apikey' to GET '"'"'/api/permissions/.*'"'"''
 
         docker-compose -f $composefile exec $service sh -c \
         'java -Drems.config=/rems/config/config.edn -jar rems.jar grant-role owner '$user
