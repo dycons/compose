@@ -5,10 +5,10 @@ DyCons server configuration and deployment
 - [compose](#compose)
   - [Table of Contents](#table-of-contents)
   - [Repository Superstructure](#repository-superstructure)
-  - [Katsu + OPA](#katsu-opa)
-  - [Participant Portal + Participant IdP](#participant-portal-participant-idp)
-  - [Researcher Portal + Researcher IdP + Katsu + REMS + OPA](#researcher-portal-researcher-idp-katsu-rems-opa)
-    - [REMS + Consents](#rems-consents)
+  - [Katsu + OPA](#katsu--opa)
+  - [Participant Portal + Participant IdP](#participant-portal--participant-idp)
+  - [Researcher Portal + Researcher IdP + Katsu + REMS + OPA](#researcher-portal--researcher-idp--katsu--rems--opa)
+    - [REMS + Consents](#rems--consents)
   - [Consents](#consents)
   - [Key Relay Service](#key-relay-service)
 
@@ -45,8 +45,7 @@ Spin up these components as follows:
    2. Run `docker-compose up katsu`
 3. (Optional) **Add Sample Katsu Data**:
    1. To add sample data to Katsu, run: `docker exec -it -w /app/chord_metadata_service/scripts katsu python ingest.py`
-4. **Add Authorization Rules to OPA**:
-   1. Run `./services/opa/opa_initialize.sh`
+4. **Add Authorization Rules to OPA**: Run `./init/opa.sh`
 
 ## Participant Portal + Participant IdP
 1. **Prepare environment**: Ensure that you have a well-configured `.env` file in the `compose` root. To use the default configuration, run `cp .default.env .env`
@@ -87,12 +86,12 @@ Spin up these components as follows:
          - OWNER_ID
          - APPLICANT_ID
 4. **Start up Katsu and OPA**:
-   1. Follow the steps [here](https://docs.github.com/en/packages/guides/pushing-and-pulling-docker-images#authenticating-to-github-container-registry) to authenticate to the GitHub Container Registry.
+   1. Follow the steps [here](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry) to authenticate to the GitHub Container Registry.
    2. Run `docker-compose up katsu`.
 5. **Add Sample Katsu Data**:
    1. To add sample data to Katsu, run: `docker exec -it -w /app/chord_metadata_service/scripts katsu python ingest.py`.
 6. **Add Authorization Rules to OPA**:
-   1. Run `./services/opa/opa_initialize.sh`.
+   1. Run `./init/opa.sh` to add authorization policies and data to OPA.
 7. **Migrate and seed REMS**:
    1. Run `./init/migrate.sh rems` to prepare the database and migrate the required tables.
    2. (Optional) Run `docker-compose run --rm -e CMD="test-data" rems` to populate REMS with test data.
