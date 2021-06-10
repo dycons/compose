@@ -63,6 +63,8 @@ services:
   rems:
     image: cscfi/rems
     container_name: rems
+    environment:
+      OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET}
     mem_reservation: 200m
     mem_limit: 500m
     ports:
