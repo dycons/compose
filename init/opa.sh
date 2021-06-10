@@ -44,7 +44,7 @@ then
     echo "ERROR: $path is an invalid path"
     echo "Please ensure the following repository is cloned locally and the -p flag contains the path to this repository:"
     echo "   https://github.com/CanDIG/candigv2_opa"
-    echo "Furthermore, please ensure that no files or directories in the cloned repository have been moved or deleted."
+    echo "Furthermore, please ensure that files data.json and passport.rego are present in the cloned repository and have not been moved."
     echo "Please rerun the script once these issues have been resolved."
     exit 1
 fi
