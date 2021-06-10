@@ -1,18 +1,8 @@
-{:port 3000
- :database-url "postgresql://db-rems:5432/rems?user=rems&password=remspassword"
- :search-index-path "/tmp/rems-search-index"
+{:search-index-path "/tmp/rems-search-index"
  :authentication :oidc
- :public-url "http://localhost:3001/"
 
  :enable-permissions-api true
 
  :ga4gh-visa-private-key "/rems/private_key"
  :ga4gh-visa-public-key "/rems/public_key"
-
- :oidc-metadata-url "http://rp-keycloak:8080/auth/realms/dycons-researcher-idp/.well-known/openid-configuration"
-
- :oidc-client-id "rems-client"
-; Remember to set the oidc-client-secret in the .env file
-
-; :entitlements-target {:add "http://consents:3005/v0/rems/add_entitlements"}
 }
