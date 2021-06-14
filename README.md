@@ -90,8 +90,15 @@ Spin up these components as follows:
     2. Run `docker-compose up katsu`
 5. **Add Sample Katsu Data**:
     1. To add sample data to Katsu, run: `docker exec -it -w /app/chord_metadata_service/scripts katsu python ingest.py`
-6. **Add Authorization Rules to OPA**:
+6. **Add Authorization Rules and Data to OPA**:
     1. To add authorization policies and data to OPA, run `./init/opa.sh`
+       - Note that the only datasets that will be affected by these policies are those listed in the `data.json` file ingested in this initialization. Currently only the following dataset titles are authorized on:
+       ```
+       https://ega-archive.org/datasets/710
+       https://ega-archive.org/datasets/712
+       urn:nbn:fi:lb-201403262
+       ```
+       - As a result, if you are using the `rems-permissions-test.postman_collection.json` Postman Collection for testing, the value of the `resource-title` environment variable must be one of the above datasets.
 7. **Migrate and seed REMS**:
     1. To prepare the database and migrate the required tables, run `./init/migrate.sh rems` 
     2. (Optional) To populate REMS with test data, run `docker-compose run --rm -e CMD="test-data" rems`
@@ -103,7 +110,7 @@ Spin up these components as follows:
     4. In the top right, click "Sign out".
     5. REMS can be made aware of any other users via either the `/users/create` endpoint, or by logging in as that user. To logout of REMS via the `rp-keycloak`, as the keycloak `admin`, navigate to `Sessions` > `Logout All` via the navbar on the left.
 9. **Using the REMS API**:
-   You can test the REMS API by submitting requests through the instance's [Swagger UI](http://localhost:3001/swagger-ui/index.html), or by running requests from the [Postman collection and test data](https://github.com/dycons/compose/tree/develop/tests). For the latter option, testing the API outside of the browser will require you to include some authorization information in the request headers.
+   You can test the REMS API by submitting requests through the instance's [Swagger UI](http://localhost:3001/swagger-ui/index.html), or by running requests from one of the [Postman Collections](https://github.com/dycons/compose/tree/develop/tests). For the latter option, testing the API outside of the browser will require you to include some authorization information in the request headers.
     1. **Prepare credentials**: Provide REMS with an API key **and** grant your user the `owner` role by running `./init/authorize.sh [options] USERID`
        - By default, the API key set by this script is `abc123`, matching the API key in the Postman collection, but you can optionally set a custom key.
        - The USERID is output by the `init/rp-keycloak.sh` script used to prepare keycloak. If you sourced the script, you can use the `$OWNER_ID` and `$APPLICANT_ID` environment variables in your shell.
@@ -111,6 +118,7 @@ Spin up these components as follows:
     3. Add headers to your requests containing the following key-value pairs:
        - `x-rems-api-key`: The API key to use for authorizing your call. Must be known to REMS.
        - `x-rems-user-id`: The ID of your user in REMS, as set by Keycloak (ex. `$OWNER_ID`)
+    4. Configure any environment variables required by other services being used alongside REMS (see #6 above).
 10. **Using the Researcher-Portal frontend** - Now it's time to test our setup by using the bundled front end:
     1. Boot up the React frontend by running `docker-compose up rp-react`
     2. Start by going to http://127.0.0.1:3004/.
