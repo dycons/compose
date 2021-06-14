@@ -4,6 +4,7 @@ services:
   db-consents:
     # Use postgres 11.7 image to match stable postgres-client debian
     image: "postgres:11.7-alpine"
+    container_name: db-consents
     environment:
       POSTGRES_DB: ${CONSENTS_POSTGRES_DB}
       POSTGRES_USER: ${CONSENTS_POSTGRES_USER}
@@ -20,6 +21,7 @@ services:
       args:
         - API_PATH=${CONSENTS_PROJECT_ROOT}/consents-service/api 
         - SWAGGERFILE=${CONSENTS_PROJECT_ROOT}/swagger.yaml   
+    container_name: consents
     environment:
       POSTGRES_DB: ${CONSENTS_POSTGRES_DB}
       POSTGRES_USER: ${CONSENTS_POSTGRES_USER}
@@ -35,14 +37,16 @@ services:
 
   pp-keycloak:
     image: quay.io/keycloak/keycloak:11.0.2
+    container_name: pp-keycloak
     environment:
-      KEYCLOAK_USER: ${KEYCLOAK_USER}
-      KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
+      KEYCLOAK_USER: ${PP_KEYCLOAK_USER}
+      KEYCLOAK_PASSWORD: ${PP_KEYCLOAK_PASSWORD}
     ports:
       - "8080:8080"
   pp-react:
     build:
       context: ${PARTICIPANT_PORTAL_REACT_DIR}
+    container_name: pp-react
     ports:
       - "3003:3000"
     volumes:
@@ -51,6 +55,7 @@ services:
 
   db-rems:
     image: postgres:9.6
+    container_name: db-rems
     environment:
       POSTGRES_USER: rems
       POSTGRES_PASSWORD: remspassword
@@ -63,6 +68,8 @@ services:
   rems:
     image: cscfi/rems
     container_name: rems
+    environment:
+      OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET}
     mem_reservation: 200m
     mem_limit: 500m
     ports:
@@ -75,16 +82,22 @@ services:
       - db-rems
     
   rp-keycloak:
-    build:
-      context: ${RESEARCHER_PORTAL_KEYCLOAK_DIR}
+    image: quay.io/keycloak/keycloak:11.0.2
+    container_name: rp-keycloak
     environment:
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_USER: ${RP_KEYCLOAK_USER}
+      KEYCLOAK_PASSWORD: ${RP_KEYCLOAK_PASSWORD}
+      KEYCLOAK_IMPORT: "/imports/realm-export.json -Dkeycloak.profile.feature.upload_scripts=enabled"
+      REMS_CLIENT_ID: ${REMS_CLIENT_ID}
+      OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET}
     ports:
       - "3002:8080"
+    volumes:
+      - ./services/keycloak/rp-keycloak.realm-export.json:/imports/realm-export.json
   rp-react:
     build:
       context: ${RESEARCHER_PORTAL_REACT_DIR}
+    container_name: rp-react
     ports:
       - "3004:3000"
     volumes:
@@ -95,6 +108,7 @@ services:
 
   db-katsu:
     image: postgres:latest
+    container_name: db-katsu
     environment:
       POSTGRES_DB: ${KATSU_POSTGRES_DB}
       POSTGRES_USER: ${KATSU_POSTGRES_USER}
@@ -128,6 +142,7 @@ services:
     build:
       context: ${RELAY_DIR}
       target: builder
+    container_name: relay
     ports:
       - 3006:3000
     volumes:
