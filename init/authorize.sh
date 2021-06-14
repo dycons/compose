@@ -11,7 +11,7 @@ help ()
    echo "Default behaviour is to assume that REMS is the target."
    echo
    echo "Usage:"
-   echo "   ./init/authorize.sh USERID [options]"
+   echo "   ./init/authorize.sh [options] USERID"
    echo "Arguments:"
    echo "   USERID  The ID of the user to authorize."
    echo "Options:"
@@ -27,9 +27,6 @@ help ()
 # Main program                                                                 #
 ################################################################################
 ################################################################################
-
-user="$1"
-
 # Default docker-compose filename.
 composefile="docker-compose.yaml"
 # Default service name to exec the migration in.
@@ -37,9 +34,8 @@ service="rems"
 # Default api key to add, if applicable.
 apikey="abc123"
 
-
-# Optionally overwrite docker compose filename or service to migrate
-while getopts ":hf:s:" opt; do
+# Optionally overwrite docker compose filename, service to migrate, or apikey to add
+while getopts ":hk:f:s:" opt; do
   case $opt in
     h)  help
         exit
@@ -54,19 +50,19 @@ while getopts ":hf:s:" opt; do
         ;;
   esac
 done
+shift $((OPTIND - 1))
+
+user="$1"
 
 echo "composefile: " $composefile
 echo "service: " $service
+echo "apikey: " $apikey
 
 case $service in
     rems)
         docker-compose -f $composefile exec $service sh -c \
         'java -Drems.config=/rems/config/config.edn -jar rems.jar api-key add '$apikey' Testing'
         echo 'Attempted to add api-key '$apikey
-
-        docker-compose -f $composefile exec $service sh -c \
-        'java -Drems.config=/rems/config/config.edn -jar rems.jar api-key allow '$apikey' get '"'"'/api/permissions/.*'"'"''
-        echo 'Attempted to authorize api-key '$apikey' to GET '"'"'/api/permissions/.*'"'"''
 
         docker-compose -f $composefile exec $service sh -c \
         'java -Drems.config=/rems/config/config.edn -jar rems.jar grant-role owner '$user
