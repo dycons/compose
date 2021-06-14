@@ -4,6 +4,7 @@ services:
   db-consents:
     # Use postgres 11.7 image to match stable postgres-client debian
     image: "postgres:11.7-alpine"
+    container_name: db-consents
     environment:
       POSTGRES_DB: ${CONSENTS_POSTGRES_DB}
       POSTGRES_USER: ${CONSENTS_POSTGRES_USER}
@@ -20,6 +21,7 @@ services:
       args:
         - API_PATH=${CONSENTS_PROJECT_ROOT}/consents-service/api 
         - SWAGGERFILE=${CONSENTS_PROJECT_ROOT}/swagger.yaml   
+    container_name: consents
     environment:
       POSTGRES_DB: ${CONSENTS_POSTGRES_DB}
       POSTGRES_USER: ${CONSENTS_POSTGRES_USER}
@@ -35,6 +37,7 @@ services:
 
   pp-keycloak:
     image: quay.io/keycloak/keycloak:11.0.2
+    container_name: pp-keycloak
     environment:
       KEYCLOAK_USER: ${PP_KEYCLOAK_USER}
       KEYCLOAK_PASSWORD: ${PP_KEYCLOAK_PASSWORD}
@@ -43,6 +46,7 @@ services:
   pp-react:
     build:
       context: ${PARTICIPANT_PORTAL_REACT_DIR}
+    container_name: pp-react
     ports:
       - "3003:3000"
     volumes:
@@ -51,6 +55,7 @@ services:
 
   db-rems:
     image: postgres:9.6
+    container_name: db-rems
     environment:
       POSTGRES_USER: rems
       POSTGRES_PASSWORD: remspassword
@@ -78,6 +83,7 @@ services:
     
   rp-keycloak:
     image: quay.io/keycloak/keycloak:11.0.2
+    container_name: rp-keycloak
     environment:
       KEYCLOAK_USER: ${RP_KEYCLOAK_USER}
       KEYCLOAK_PASSWORD: ${RP_KEYCLOAK_PASSWORD}
@@ -91,6 +97,7 @@ services:
   rp-react:
     build:
       context: ${RESEARCHER_PORTAL_REACT_DIR}
+    container_name: rp-react
     ports:
       - "3004:3000"
     volumes:
@@ -101,6 +108,7 @@ services:
 
   db-katsu:
     image: postgres:latest
+    container_name: db-katsu
     environment:
       POSTGRES_DB: ${KATSU_POSTGRES_DB}
       POSTGRES_USER: ${KATSU_POSTGRES_USER}
@@ -134,6 +142,7 @@ services:
     build:
       context: ${RELAY_DIR}
       target: builder
+    container_name: relay
     ports:
       - 3006:3000
     volumes:

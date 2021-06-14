@@ -61,7 +61,7 @@ _get_secret () {
     # Once the secret is in a variable, it can:
     #   (1) be substituted into the .env file using envsubst from the gnu_gettext package
     #   (2) be fed to Newman as an environment variable to use when sending API requests.
-    docker cp compose_rp-keycloak_1:/tmp/rems-client-secret.json tmp
+    docker cp rp-keycloak:/tmp/rems-client-secret.json tmp
     echo $(jq .value tmp/rems-client-secret.json)
 }
 
@@ -126,7 +126,7 @@ _get_user () {
 
     # Copy the user info from the keycloak container to the host, then fetch the user ID.
     # Once the user ID is in a variable, it can be fed to Newman as an environment variable to use when sending API requests.
-    docker cp compose_rp-keycloak_1:/tmp/user.json tmp
+    docker cp rp-keycloak:/tmp/user.json tmp
 
     echo $(jq .[].id tmp/user.json)
 }
