@@ -57,8 +57,8 @@ services:
     image: postgres:9.6
     container_name: db-rems
     environment:
-      POSTGRES_USER: rems
-      POSTGRES_PASSWORD: remspassword
+      POSTGRES_USER: ${REMS_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${REMS_POSTGRES_PASSWORD}
     mem_reservation: 30m
     mem_limit: 150m
     ports:
@@ -69,7 +69,13 @@ services:
     image: cscfi/rems
     container_name: rems
     environment:
+      PORT: 3000
+      DATABASE_URL: "postgresql://db-rems:5432/rems?user=${REMS_POSTGRES_USER}&password=${REMS_POSTGRES_PASSWORD}"
+      PUBLIC_URL: "http://localhost:3001/"
+      OIDC_METADATA_URL: "http://rp-keycloak:8080/auth/realms/dycons-researcher-idp/.well-known/openid-configuration"
+      OIDC_CLIENT_ID: "rems-client"
       OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET}
+      # ENTITLEMENTS_TARGET__ADD: "http://consents:3005/v0/rems/add_entitlements"
     mem_reservation: 200m
     mem_limit: 500m
     ports:

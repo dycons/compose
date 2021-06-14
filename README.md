@@ -130,9 +130,9 @@ Spin up these components as follows:
        3. Continue development on your machine - changes will be mapped to the volume inside the container and reflected at http://127.0.0.1:3004/.
 
 ### REMS + Consents
-To push new `entitlements` to the Consents service, uncomment the following line in `simple-config.edn` prior to running the REMS container:
+To push new `entitlements` to the Consents service, uncomment the following `rems` environment variable in `docker-compose.yaml` prior to running the REMS container:
 ```
-:entitlements-target {:add "http://consents:3005/v0/rems/add_entitlements"}
+ENTITLEMENTS_TARGET__ADD: "http://consents:3005/v0/rems/add_entitlements"
 ```
 
 ## Consents
