@@ -9,7 +9,7 @@ help ()
    echo "Run migrations on the database out of a Docker container."
    echo
    echo "Usage:"
-   echo "   ./init/migrate.sh SERVICE [options]"
+   echo "   ./init/migrate.sh [options] SERVICE"
    echo "Arguments:"
    echo "   SERVICE Docker service container to exec the migration in.."
    echo "Options:"
@@ -23,8 +23,6 @@ help ()
 # Main program                                                                 #
 ################################################################################
 ################################################################################
-
-service="$1"
 
 # Default docker-compose filename. Can overwrite with -f argument.
 composefile="docker-compose.yaml"
@@ -41,6 +39,9 @@ while getopts ":hf:" opt; do
         ;;
   esac
 done
+shift $((OPTIND - 1))
+
+service="$1"
 
 echo "composefile: " $composefile
 echo "service: " $service
