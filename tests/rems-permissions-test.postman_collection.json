@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f17c8e2d-43fe-4c93-a0a4-dd8007f8ba20",
+		"_postman_id": "5753b3c7-05fa-42ef-b582-e8a6b0b72eed",
 		"name": "rems-permissions-test",
 		"description": "A collection of requests testing the REMS add-entitlements webhook, which is ingested by the Consents service to initialize ProjectConsents.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -1219,7 +1219,12 @@
 									"// Test that request succeeded",
 									"pm.test(\"Successful POST request\", function () {",
 									"    pm.response.to.have.status(201);",
-									"});"
+									"});",
+									"",
+									"if (responseCode.code == 201) {",
+									"    const jsonData = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"phenopacket_id\", jsonData.id);",
+									"}"
 								],
 								"type": "text/javascript"
 							}
@@ -2223,7 +2228,7 @@
 					"response": []
 				},
 				{
-					"name": "Get a resource from Katsu (ex. individual) as the applicant",
+					"name": "Get individuals from Katsu as the applicant",
 					"event": [
 						{
 							"listen": "test",
@@ -2270,7 +2275,7 @@
 								"individuals"
 							]
 						},
-						"description": "This is a placeholder for requests to Katsu made by the applicant. The Headers should include the X-CANDIG-EXT-REMS header, containing the applicants Visa from the REMS /api/permissions endpoint."
+						"description": "This is a placeholder for requests to Katsu made by the applicant. The Headers should include the X-CANDIG-EXT-REMS header, containing the applicant's Visa from the REMS /api/permissions endpoint."
 					},
 					"response": [
 						{
@@ -2297,40 +2302,6 @@
 							},
 							"status": "Not Found",
 							"code": 404,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n \"code\": \"<integer>\",\n \"message\": \"<string>\"\n}"
-						},
-						{
-							"name": "Internal error",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{baseUrl}}/participants/:study_identifier/project_consents",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"participants",
-										":study_identifier",
-										"project_consents"
-									],
-									"variable": [
-										{
-											"key": "study_identifier"
-										}
-									]
-								}
-							},
-							"status": "Internal Server Error",
-							"code": 500,
 							"_postman_previewlanguage": "json",
 							"header": [
 								{
@@ -2374,6 +2345,195 @@
 							],
 							"cookie": [],
 							"body": "{\n \"application_id\": \"<uuid>\",\n \"genetic_consent\": false,\n \"clinical_consent\": false\n}"
+						},
+						{
+							"name": "Internal error",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/participants/:study_identifier/project_consents",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"participants",
+										":study_identifier",
+										"project_consents"
+									],
+									"variable": [
+										{
+											"key": "study_identifier"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"code\": \"<integer>\",\n \"message\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get phenopackets from Katsu as the applicant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"const results = responseData.results;",
+									"",
+									"pm.test(\"Response contains exactly eleven results\", () => {",
+									"    pm.expect(results).to.have.lengthOf(11);",
+									"})",
+									"",
+									"// ex. Test that response values equal the expected values",
+									"pm.test(\"Response values satisfy expectations\", () => {",
+									"    for (let i = 0; i < 11; i++) {",
+									"        pm.expect(results[i].id).not.eql(pm.collectionVariables.get(\"phenopacket_id\"));",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-CANDIG-EXT-REMS",
+								"type": "text",
+								"value": "{{applicant_rems_visa}}"
+							}
+						],
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/phenopackets",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"phenopackets"
+							]
+						},
+						"description": "This is a placeholder for requests to Katsu made by the applicant. The Headers should include the X-CANDIG-EXT-REMS header, containing the applicant's Visa from the REMS /api/permissions endpoint."
+					},
+					"response": [
+						{
+							"name": "Participant not found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/participants/:study_identifier/project_consents",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"participants",
+										":study_identifier",
+										"project_consents"
+									],
+									"variable": [
+										{
+											"key": "study_identifier"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"code\": \"<integer>\",\n \"message\": \"<string>\"\n}"
+						},
+						{
+							"name": "Return all affiliated project consents",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/participants/:study_identifier/project_consents",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"participants",
+										":study_identifier",
+										"project_consents"
+									],
+									"variable": [
+										{
+											"key": "study_identifier"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"application_id\": \"<uuid>\",\n \"genetic_consent\": false,\n \"clinical_consent\": false\n}"
+						},
+						{
+							"name": "Internal error",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/participants/:study_identifier/project_consents",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"participants",
+										":study_identifier",
+										"project_consents"
+									],
+									"variable": [
+										{
+											"key": "study_identifier"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"code\": \"<integer>\",\n \"message\": \"<string>\"\n}"
 						}
 					]
 				}
@@ -2561,7 +2721,7 @@
 					"response": []
 				},
 				{
-					"name": "Get a resource from Katsu (ex. individual) as the applicant",
+					"name": "Get individuals from Katsu as the applicant",
 					"event": [
 						{
 							"listen": "test",
@@ -2601,7 +2761,7 @@
 								"individuals"
 							]
 						},
-						"description": "This is a placeholder for requests to Katsu made by the applicant. The Headers should include the X-CANDIG-EXT-REMS header, containing the applicants Visa from the REMS /api/permissions endpoint."
+						"description": "This is a placeholder for requests to Katsu made by the applicant. The Headers should include the X-CANDIG-EXT-REMS header, containing the applicant's Visa from the REMS /api/permissions endpoint."
 					},
 					"response": [
 						{
@@ -2671,6 +2831,154 @@
 							],
 							"cookie": [],
 							"body": "{\n \"application_id\": \"<uuid>\",\n \"genetic_consent\": false,\n \"clinical_consent\": false\n}"
+						},
+						{
+							"name": "Participant not found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/participants/:study_identifier/project_consents",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"participants",
+										":study_identifier",
+										"project_consents"
+									],
+									"variable": [
+										{
+											"key": "study_identifier"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"code\": \"<integer>\",\n \"message\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get phenopackets from Katsu as the applicant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test that request succeeded",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseData = pm.response.json();",
+									"const results = responseData.results;",
+									"",
+									"pm.test(\"Response contains no results\", () => {",
+									"    pm.expect(results).to.have.lengthOf(0);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-CANDIG-EXT-REMS",
+								"type": "text",
+								"value": "{{applicant_rems_visa}}"
+							}
+						],
+						"url": {
+							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/phenopackets",
+							"host": [
+								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+							],
+							"path": [
+								"phenopackets"
+							]
+						},
+						"description": "This is a placeholder for requests to Katsu made by the applicant. The Headers should include the X-CANDIG-EXT-REMS header, containing the applicant's Visa from the REMS /api/permissions endpoint."
+					},
+					"response": [
+						{
+							"name": "Return all affiliated project consents",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/participants/:study_identifier/project_consents",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"participants",
+										":study_identifier",
+										"project_consents"
+									],
+									"variable": [
+										{
+											"key": "study_identifier"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"application_id\": \"<uuid>\",\n \"genetic_consent\": false,\n \"clinical_consent\": false\n}"
+						},
+						{
+							"name": "Internal error",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/participants/:study_identifier/project_consents",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"participants",
+										":study_identifier",
+										"project_consents"
+									],
+									"variable": [
+										{
+											"key": "study_identifier"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"code\": \"<integer>\",\n \"message\": \"<string>\"\n}"
 						},
 						{
 							"name": "Participant not found",
@@ -2778,6 +3086,10 @@
 		},
 		{
 			"key": "individual_id",
+			"value": ""
+		},
+		{
+			"key": "phenopacket_id",
 			"value": ""
 		},
 		{
