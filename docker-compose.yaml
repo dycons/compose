@@ -110,7 +110,7 @@ services:
       - ${RESEARCHER_PORTAL_REACT_DIR}:/app
       - /app/node_modules
     environment:
-      REACT_APP_REMS_OWNER_ID: ${REMS_OWNER_ID}
+      REACT_APP_REMS_API_KEY: ${REMS_API_KEY}
 
   db-katsu:
     image: postgres:latest
