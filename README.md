@@ -49,13 +49,13 @@ Spin up these components as follows:
 
 ## Participant Portal + Participant IdP
 1. **Prepare environment**: Ensure that you have a well-configured `.env` file in the `compose` root. To use the default configuration, run `cp .default.env .env`
-2. First make sure the keycloak service is running via `docker-compose up pp-keycloak`
+2. Make sure the required services are running via `docker-compose up pp-keycloak relay`
 3. **Add test Realm:**
     1. Navigate to http://127.0.0.1:8080/auth/admin.
     2. Login using the username and password: `admin` / `admin`
     3. Add the test **Realm** by hovering over the "Master" label in the top left, and click "Add realm".
     4. Click "Select File" and choose the preconfigured realm at `../participant-portal/keycloak/realm-export.json`. The name should be autofilled with `dycons-participant-idp`.
-   5. Click "Save" to finish.
+    5. Click "Save" to finish.
 4. **Add test User**:
     1. Navigate to the "Users" menu via the navbar on the left
     2. Click "Add User" on the right side of the page
@@ -67,7 +67,7 @@ Spin up these components as follows:
     2. Start by going to http://127.0.0.1:3003/.
     3. Click on the "Login" button and you should be redirected to the Keycloak login screen.
     4. Access the account using `varchar`/`varchar`. You'll be redirected back to the React frontend with the user's JWT token and email displayed.
-   5. ** For active development **
+    5. ** For active development **
       1. Instead of step 1, run the following, which will log you into the application: `docker-compose run --rm --entrypoint sh --service-port pp-react`
       2. Run `yarn start` to compile the app.
       3. Continue development on your machine - changes will be mapped to the volume inside the container and reflected at http://127.0.0.1:3002
@@ -100,7 +100,7 @@ Spin up these components as follows:
        ```
        - As a result, if you are using the `rems-permissions-test.postman_collection.json` Postman Collection for testing, the value of the `resource-title` environment variable must be one of the above datasets.
 7. **Migrate and seed REMS**:
-    1. To prepare the database and migrate the required tables, run `./init/migrate.sh rems` 
+    1. To prepare the database and migrate the required tables, run `./init/migrate.sh rems`
     2. (Optional) To populate REMS with test data, run `docker-compose run --rm -e CMD="test-data" rems`
     3. REMS should now be ready for use. Run `docker-compose up rems`
 8. **Log In to REMS**:

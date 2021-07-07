@@ -19,8 +19,8 @@ services:
       dockerfile: ./docker/test.Dockerfile
       target: consents
       args:
-        - API_PATH=${CONSENTS_PROJECT_ROOT}/consents-service/api 
-        - SWAGGERFILE=${CONSENTS_PROJECT_ROOT}/swagger.yaml   
+        - API_PATH=${CONSENTS_PROJECT_ROOT}/consents-service/api
+        - SWAGGERFILE=${CONSENTS_PROJECT_ROOT}/swagger.yaml
     container_name: consents
     environment:
       POSTGRES_DB: ${CONSENTS_POSTGRES_DB}
@@ -52,6 +52,8 @@ services:
     volumes:
       - ${PARTICIPANT_PORTAL_REACT_DIR}:/app
       - /app/node_modules
+    environment:
+      REACT_APP_RELAY_HOST: ${RELAY_PUBLIC_HOST}
 
   db-rems:
     image: postgres:9.6
@@ -86,7 +88,7 @@ services:
       - ./services/rems/private_key:/rems/private_key
     depends_on:
       - db-rems
-    
+
   rp-keycloak:
     image: quay.io/keycloak/keycloak:11.0.2
     container_name: rp-keycloak
@@ -164,7 +166,7 @@ services:
     ports:
       - "8181:8181"
     entrypoint: ["/opa", "run", "--server", "--log-level", "debug"]
-    
+
 volumes:
   rems-db-data:
   katsu-db-data:
