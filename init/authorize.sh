@@ -78,7 +78,7 @@ while getopts ":hk:f:s:" opt; do
     h)  help
         exit
         ;;
-    k)  REMS_API_KEY="$OPTARG"
+    k)  export REMS_API_KEY="$OPTARG"
         ;;
     f)  composefile="$OPTARG"
         ;;
@@ -117,15 +117,15 @@ echo "composefile: " $composefile
 echo "service: " $service
 echo "REMS_API_KEY: " $REMS_API_KEY
 
-echo "Substituting the REMS API key into the docker-compose environment..."
-if _set_api_key
-then
-    echo "REMS API key added to the environment."
-fi
-echo
-
 case $service in
     rems)
+        echo "Substituting the REMS API key into the docker-compose environment..."
+        if _set_api_key
+        then
+            echo "REMS API key added to the environment."
+        fi
+        echo
+
         docker-compose -f $composefile exec $service sh -c \
         'java -Drems.config=/rems/config/config.edn -jar rems.jar api-key add '$REMS_API_KEY' Testing'
         echo 'Attempted to add api-key '$REMS_API_KEY
