@@ -91,4 +91,3 @@ services:
 volumes:
   rems-db-data:
   katsu-db-data:
-  consents-db-data:
