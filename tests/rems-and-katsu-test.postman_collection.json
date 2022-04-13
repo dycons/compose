@@ -46,9 +46,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/projects",
+									"raw": "{{katsu_url}}{{katsu_base_path}}/projects",
 									"host": [
-										"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+										"{{katsu_url}}{{katsu_base_path}}"
 									],
 									"path": [
 										"projects"
@@ -91,9 +91,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/datasets",
+									"raw": "{{katsu_url}}{{katsu_base_path}}/datasets",
 									"host": [
-										"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+										"{{katsu_url}}{{katsu_base_path}}"
 									],
 									"path": [
 										"datasets"
@@ -136,9 +136,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/table_ownership",
+									"raw": "{{katsu_url}}{{katsu_base_path}}/table_ownership",
 									"host": [
-										"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+										"{{katsu_url}}{{katsu_base_path}}"
 									],
 									"path": [
 										"table_ownership"
@@ -176,9 +176,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/tables",
+									"raw": "{{katsu_url}}{{katsu_base_path}}/tables",
 									"host": [
-										"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+										"{{katsu_url}}{{katsu_base_path}}"
 									],
 									"path": [
 										"tables"
@@ -221,9 +221,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/metadata",
+									"raw": "{{katsu_url}}{{katsu_base_path}}/metadata",
 									"host": [
-										"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+										"{{katsu_url}}{{katsu_base_path}}"
 									],
 									"path": [
 										"metadata"
@@ -266,9 +266,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/individuals",
+									"raw": "{{katsu_url}}{{katsu_base_path}}/individuals",
 									"host": [
-										"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+										"{{katsu_url}}{{katsu_base_path}}"
 									],
 									"path": [
 										"individuals"
@@ -306,9 +306,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/phenopackets",
+									"raw": "{{katsu_url}}{{katsu_base_path}}/phenopackets",
 									"host": [
-										"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+										"{{katsu_url}}{{katsu_base_path}}"
 									],
 									"path": [
 										"phenopackets"
@@ -351,9 +351,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/individuals",
+									"raw": "{{katsu_url}}{{katsu_base_path}}/individuals",
 									"host": [
-										"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+										"{{katsu_url}}{{katsu_base_path}}"
 									],
 									"path": [
 										"individuals"
@@ -391,9 +391,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/phenopackets",
+									"raw": "{{katsu_url}}{{katsu_base_path}}/phenopackets",
 									"host": [
-										"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+										"{{katsu_url}}{{katsu_base_path}}"
 									],
 									"path": [
 										"phenopackets"
@@ -436,9 +436,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/individuals",
+									"raw": "{{katsu_url}}{{katsu_base_path}}/individuals",
 									"host": [
-										"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+										"{{katsu_url}}{{katsu_base_path}}"
 									],
 									"path": [
 										"individuals"
@@ -476,9 +476,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/phenopackets",
+									"raw": "{{katsu_url}}{{katsu_base_path}}/phenopackets",
 									"host": [
-										"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+										"{{katsu_url}}{{katsu_base_path}}"
 									],
 									"path": [
 										"phenopackets"
@@ -526,9 +526,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/individuals",
+									"raw": "{{katsu_url}}{{katsu_base_path}}/individuals",
 									"host": [
-										"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+										"{{katsu_url}}{{katsu_base_path}}"
 									],
 									"path": [
 										"individuals"
@@ -571,9 +571,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/phenopackets",
+									"raw": "{{katsu_url}}{{katsu_base_path}}/phenopackets",
 									"host": [
-										"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+										"{{katsu_url}}{{katsu_base_path}}"
 									],
 									"path": [
 										"phenopackets"
@@ -666,9 +666,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/users/create",
+							"raw": "{{rems_url}}{{rems_base_path}}/users/create",
 							"host": [
-								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+								"{{rems_url}}{{rems_base_path}}"
 							],
 							"path": [
 								"users",
@@ -741,9 +741,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/organizations/create",
+							"raw": "{{rems_url}}{{rems_base_path}}/organizations/create",
 							"host": [
-								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+								"{{rems_url}}{{rems_base_path}}"
 							],
 							"path": [
 								"organizations",
@@ -813,9 +813,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/forms/create",
+							"raw": "{{rems_url}}{{rems_base_path}}/forms/create",
 							"host": [
-								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+								"{{rems_url}}{{rems_base_path}}"
 							],
 							"path": [
 								"forms",
@@ -885,9 +885,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/licenses/create",
+							"raw": "{{rems_url}}{{rems_base_path}}/licenses/create",
 							"host": [
-								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+								"{{rems_url}}{{rems_base_path}}"
 							],
 							"path": [
 								"licenses",
@@ -957,9 +957,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/resources/create",
+							"raw": "{{rems_url}}{{rems_base_path}}/resources/create",
 							"host": [
-								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+								"{{rems_url}}{{rems_base_path}}"
 							],
 							"path": [
 								"resources",
@@ -1029,9 +1029,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/workflows/create",
+							"raw": "{{rems_url}}{{rems_base_path}}/workflows/create",
 							"host": [
-								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+								"{{rems_url}}{{rems_base_path}}"
 							],
 							"path": [
 								"workflows",
@@ -1101,9 +1101,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/catalogue-items/create",
+							"raw": "{{rems_url}}{{rems_base_path}}/catalogue-items/create",
 							"host": [
-								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+								"{{rems_url}}{{rems_base_path}}"
 							],
 							"path": [
 								"catalogue-items",
@@ -1178,9 +1178,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/applications/create",
+							"raw": "{{rems_url}}{{rems_base_path}}/applications/create",
 							"host": [
-								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+								"{{rems_url}}{{rems_base_path}}"
 							],
 							"path": [
 								"applications",
@@ -1243,9 +1243,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/applications/{{application_id}}/raw",
+							"raw": "{{rems_url}}{{rems_base_path}}/applications/{{application_id}}/raw",
 							"host": [
-								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+								"{{rems_url}}{{rems_base_path}}"
 							],
 							"path": [
 								"applications",
@@ -1314,9 +1314,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/applications/accept-licenses",
+							"raw": "{{rems_url}}{{rems_base_path}}/applications/accept-licenses",
 							"host": [
-								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+								"{{rems_url}}{{rems_base_path}}"
 							],
 							"path": [
 								"applications",
@@ -1383,9 +1383,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/applications/submit",
+							"raw": "{{rems_url}}{{rems_base_path}}/applications/submit",
 							"host": [
-								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+								"{{rems_url}}{{rems_base_path}}"
 							],
 							"path": [
 								"applications",
@@ -1457,9 +1457,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/applications/approve",
+							"raw": "{{rems_url}}{{rems_base_path}}/applications/approve",
 							"host": [
-								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+								"{{rems_url}}{{rems_base_path}}"
 							],
 							"path": [
 								"applications",
@@ -1545,9 +1545,9 @@
 							}
 						],
 						"url": {
-							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/permissions/{{rems-applicant-user-id}}",
+							"raw": "{{rems_url}}{{rems_base_path}}/permissions/{{rems-applicant-user-id}}",
 							"host": [
-								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+								"{{rems_url}}{{rems_base_path}}"
 							],
 							"path": [
 								"permissions",
@@ -1597,9 +1597,9 @@
 							}
 						],
 						"url": {
-							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/individuals",
+							"raw": "{{rems_url}}{{rems_base_path}}/individuals",
 							"host": [
-								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+								"{{rems_url}}{{rems_base_path}}"
 							],
 							"path": [
 								"individuals"
@@ -1752,9 +1752,9 @@
 							}
 						],
 						"url": {
-							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/phenopackets",
+							"raw": "{{rems_url}}{{rems_base_path}}/phenopackets",
 							"host": [
-								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+								"{{rems_url}}{{rems_base_path}}"
 							],
 							"path": [
 								"phenopackets"
@@ -1949,9 +1949,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/applications/revoke",
+							"raw": "{{rems_url}}{{rems_base_path}}/applications/revoke",
 							"host": [
-								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+								"{{rems_url}}{{rems_base_path}}"
 							],
 							"path": [
 								"applications",
@@ -2038,9 +2038,9 @@
 							}
 						],
 						"url": {
-							"raw": "{{rems_scheme}}{{rems_host}}{{rems_base_path}}/permissions/{{rems-applicant-user-id}}",
+							"raw": "{{rems_url}}{{rems_base_path}}/permissions/{{rems-applicant-user-id}}",
 							"host": [
-								"{{rems_scheme}}{{rems_host}}{{rems_base_path}}"
+								"{{rems_url}}{{rems_base_path}}"
 							],
 							"path": [
 								"permissions",
@@ -2083,9 +2083,9 @@
 							}
 						],
 						"url": {
-							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/individuals",
+							"raw": "{{rems_url}}{{rems_base_path}}/individuals",
 							"host": [
-								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+								"{{rems_url}}{{rems_base_path}}"
 							],
 							"path": [
 								"individuals"
@@ -2231,9 +2231,9 @@
 							}
 						],
 						"url": {
-							"raw": "{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}/phenopackets",
+							"raw": "{{rems_url}}{{rems_base_path}}/phenopackets",
 							"host": [
-								"{{katsu_scheme}}{{katsu_host}}{{katsu_base_path}}"
+								"{{rems_url}}{{rems_base_path}}"
 							],
 							"path": [
 								"phenopackets"
@@ -2390,30 +2390,6 @@
 		}
 	],
 	"variable": [
-		{
-			"key": "rems_scheme",
-			"value": "http://"
-		},
-		{
-			"key": "rems_host",
-			"value": "localhost:3001"
-		},
-		{
-			"key": "rems_base_path",
-			"value": "/api"
-		},
-		{
-			"key": "katsu_scheme",
-			"value": "http://"
-		},
-		{
-			"key": "katsu_host",
-			"value": "localhost:8000"
-		},
-		{
-			"key": "katsu_base_path",
-			"value": "/api"
-		},
 		{
 			"key": "individual_id",
 			"value": ""

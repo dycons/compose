@@ -117,3 +117,7 @@ In case of error, here's an example you can examine instead. Copy the long strin
     ]
 }
 ```
+
+## Technical debt
+
+Currently there is a `frontendUrl` hardcoded in `rp-keycloak.realm-export.json`. This was a necessary workaround in the past, to get routing from REMS to the keycloak and back to work properly, but can probably be removed now.
