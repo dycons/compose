@@ -55,7 +55,7 @@ For ClinDIG 4.2 DAC Portal demo, ignore all (Optional) steps below.
        https://ega-archive.org/datasets/712
        urn:nbn:fi:lb-201403262
        ```
-       - As a result, if you are using the `rems-permissions-test.postman_collection.json` Postman Collection for testing, the value of the `resource-title` environment variable must be one of the above datasets.
+       - As a result, if you are using the `rems-and-katsu-test.postman_collection.json` Postman Collection for testing, the value of the `resource-title` environment variable must be one of the above datasets.
 7. **Migrate and seed REMS**:
     1. To prepare the database and migrate the required tables, run `./init/migrate.sh rems` 
     2. (Optional) To populate REMS with test data, run `docker-compose run --rm -e CMD="test-data" rems`
