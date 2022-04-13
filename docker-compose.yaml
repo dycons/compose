@@ -61,7 +61,7 @@ services:
     volumes:
       - katsu-db-data:/var/lib/postgresql/data
   katsu:
-    build: ${KATSU_DIR}
+    image: ghcr.io/candig/candig-katsu:latest
     container_name: katsu
     volumes:
       - ./services/katsu/katsu_entrypoint.sh:/app/katsu_entrypoint.sh

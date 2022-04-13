@@ -22,21 +22,20 @@ Forked from [dycons/compose], significantly divergent due to having all componen
 
 ### Dependencies
 
-Setup expects the following repos to be available on the development/test machine:
+In addition to this repository, the following should be available in the demo VM:
 
-- `../katsu`: preferably checkout the year-old [commit `bbde238fe4c5410a10945a278877ab590fe0446d`](https://github.com/CanDIG/katsu/commit/bbde238fe4c5410a10945a278877ab590fe0446d), which is guaranteed to work. Should later be upgraded + made a submodule.
 - Postman for running the demo (a collection of API requests.)
 
 ### Setting up the demo environment
 
-For ClinDIG 4.2 DAC Portal demo, ignore all (Optional) steps.
+For ClinDIG 4.2 DAC Portal demo, ignore all (Optional) steps below.
 
 1. **Prepare environment**: Ensure that you have a well-configured `.env` file in the `compose` root. To use the default configuration, run `cp .default.env .env`
 2. **Start up Researcher IdP**:
     1. Run `docker-compose up rp-keycloak`.
 3. **Prepare Keycloak**:
     1. To prepare the keycloak for use with rems, run: `. ./init/rp-keycloak.sh`
-       1. This will add two test users
+       1. This will import a keycloak realm, initialize it, and add two test users:
           - username: `applicant`, password: `applicant`
           - username: `owner`, password: `owner`
        2. This will export the following environment variables to your shell, for use in authorization. Skip sourcing the script if this is not desired.
@@ -61,25 +60,28 @@ For ClinDIG 4.2 DAC Portal demo, ignore all (Optional) steps.
     1. To prepare the database and migrate the required tables, run `./init/migrate.sh rems` 
     2. (Optional) To populate REMS with test data, run `docker-compose run --rm -e CMD="test-data" rems`
     3. REMS should now be ready for use. Run `docker-compose up rems`
-9. **Create REMS Users**:
+8. **Create REMS Users**:
    You can test the REMS API by submitting requests through the instance's [Swagger UI](http://localhost:3001/swagger-ui/index.html), or by running requests from one of the [Postman Collections](https://github.com/dycons/compose/tree/develop/tests). For the latter option, testing the API outside of the browser will require you to include some authorization information in the request headers.
 
-    You will need 2 users for this demo.
+    We will use 2 users in this demo. We will add the owner to REMS now.
 
-    1. **Prepare credentials for owner user**: Provide REMS with an API key **and** grant your user the `owner` role by running `./init/authorize.sh $OWNER_ID`
-       - By default, the API key set by this script is `abc123`, matching the API key in the Postman collection, but you can optionally set a custom key.
-       - The USERID is output by the `init/rp-keycloak.sh` script used to prepare keycloak. If you sourced the script, you can use the `$OWNER_ID` and `$APPLICANT_ID` environment variables in your shell.
-    2. **Logging in to REMS**: Make sure your user is known to REMS. This can be accomplished by logging in through the browser **or** IFF you have act as a user with the `owner` role, by sending a request to the `/api/users/create` endpoint. The `userid` must match the user's id in Keycloak.
+    1. **Log owner in to REMS**: Make sure your user is known to REMS.
         1. Navigate to http://127.0.0.1:3001
         2. Click "Login".
         3. Login using the username and password: `owner` / `owner`
             - REMS can be made aware of any other users via either the `/users/create` endpoint, or by logging in as that user.
-        4. In the top right, click "Sign out".
+        4. (Optional) In the top right, click "Sign out".
             - (Optional) To logout of REMS via the `rp-keycloak`, as the keycloak `admin`, navigate to `Sessions` > `Logout All` via the navbar on the left.
+    2. **Prepare credentials for owner user**: Provide REMS with an API key **and** grant your user the `owner` role by running `./init/authorize.sh $OWNER_ID`
+       - By default, the API key set by this script is `abc123`, matching the API key in the Postman collection, but you can optionally set a custom key.
+       - The USERID is output by the `init/rp-keycloak.sh` script used to prepare keycloak. If you sourced the script, you can use the `$OWNER_ID` and `$APPLICANT_ID` environment variables in your shell.
+
+Future users can be created in REMS by logging in through the browser **or** IFF you have act as a user with the `owner` role, by sending a request to the `/api/users/create` endpoint. The `userid` must match the user's id in Keycloak.
+
 10. **Prepare Postman authorization headers**: Add headers to your requests containing the following key-value pairs:
 - `x-rems-api-key`: The API key to use for authorizing your call. Must be known to REMS. Set by `./init/authorize.sh`
 - `x-rems-user-id`: The ID of your user in REMS, as set by Keycloak (ex. `$OWNER_ID`)
-Postman lets you easily reuse information like authorization variables with environment variables. Edit the `tests/rems-and-katsu-test.postman_environment.json` to populate environment variables for the demo, especially `rems-owner-user-id` and `rems-applicant-user-id`. Double-check `rems-api-key` as well.
+Postman lets you easily reuse information like authorization variables with environment variables. Edit the `tests/rems-and-katsu-test.postman_environment.json` to populate environment variables for the demo, especially `rems-owner-user-id` and `rems-applicant-user-id`. Double-check `rems-api-key` as well. **Make sure to remove all `""` quotation marks from the environment variable values!!**
 
 ## For Karen
 
