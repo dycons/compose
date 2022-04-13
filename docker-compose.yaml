@@ -1,58 +1,6 @@
 version: "3.7"
 
 services:
-  db-consents:
-    # Use postgres 11.7 image to match stable postgres-client debian
-    image: "postgres:11.7-alpine"
-    container_name: db-consents
-    environment:
-      POSTGRES_DB: ${CONSENTS_POSTGRES_DB}
-      POSTGRES_USER: ${CONSENTS_POSTGRES_USER}
-      POSTGRES_PASSWORD: ${CONSENTS_POSTGRES_PASSWORD}
-    ports:
-      - "5434:5432"
-    volumes:
-      - consents-db-data:/var/lib/postgresql/data/
-  consents:
-    build:
-      context: ${CONSENTS_DIR}
-      dockerfile: ./docker/test.Dockerfile
-      target: consents
-      args:
-        - API_PATH=${CONSENTS_PROJECT_ROOT}/consents-service/api 
-        - SWAGGERFILE=${CONSENTS_PROJECT_ROOT}/swagger.yaml   
-    container_name: consents
-    environment:
-      POSTGRES_DB: ${CONSENTS_POSTGRES_DB}
-      POSTGRES_USER: ${CONSENTS_POSTGRES_USER}
-      POSTGRES_PASSWORD: ${CONSENTS_POSTGRES_PASSWORD}
-      POSTGRES_HOST: "db-consents"
-      POSTGRES_PORT: 5432
-      GOPATH: ${GOPATH}
-      APP_PATH: ${CONSENTS_PROJECT_ROOT}/consents-service
-    depends_on:
-      - db-consents
-    ports:
-      - "3005:3005"
-
-  pp-keycloak:
-    image: quay.io/keycloak/keycloak:11.0.2
-    container_name: pp-keycloak
-    environment:
-      KEYCLOAK_USER: ${PP_KEYCLOAK_USER}
-      KEYCLOAK_PASSWORD: ${PP_KEYCLOAK_PASSWORD}
-    ports:
-      - "8080:8080"
-  pp-react:
-    build:
-      context: ${PARTICIPANT_PORTAL_REACT_DIR}
-    container_name: pp-react
-    ports:
-      - "3003:3000"
-    volumes:
-      - ${PARTICIPANT_PORTAL_REACT_DIR}:/app
-      - /app/node_modules
-
   db-rems:
     image: postgres:9.6
     container_name: db-rems
@@ -100,17 +48,6 @@ services:
       - "3002:8080"
     volumes:
       - ./services/keycloak/rp-keycloak.realm-export.json:/imports/realm-export.json
-  rp-react:
-    build:
-      context: ${RESEARCHER_PORTAL_REACT_DIR}
-    container_name: rp-react
-    ports:
-      - "3004:3000"
-    volumes:
-      - ${RESEARCHER_PORTAL_REACT_DIR}:/app
-      - /app/node_modules
-    environment:
-      REACT_APP_REMS_API_KEY: ${REMS_API_KEY}
 
   db-katsu:
     image: postgres:latest
@@ -124,7 +61,7 @@ services:
     volumes:
       - katsu-db-data:/var/lib/postgresql/data
   katsu:
-    image: ghcr.io/candig/candig-katsu:latest
+    build: ${KATSU_DIR}
     container_name: katsu
     volumes:
       - ./services/katsu/katsu_entrypoint.sh:/app/katsu_entrypoint.sh
@@ -143,20 +80,6 @@ services:
       POSTGRES_USER: ${KATSU_POSTGRES_USER}
       POSTGRES_PASSWORD: ${KATSU_POSTGRES_PASSWORD}
       CANDIG_OPA_URL: http://opa:8181
-
-  relay:
-    build:
-      context: ${RELAY_DIR}
-      target: builder
-    container_name: relay
-    ports:
-      - 3006:3000
-    volumes:
-      - ${RELAY_DIR}:/build
-      - /build/bin/
-    entrypoint: ["sh", "./init.sh"]
-    environment:
-      SHARED_KEY: ${SHARED_KEY}
 
   opa:
     image: openpolicyagent/opa:latest

@@ -1,13 +1,13 @@
 {
 	"info": {
-		"_postman_id": "d36a844b-1360-49c8-bb6d-89092407b852",
-		"name": "rems-permissions-test",
+		"_postman_id": "39ff8509-9eee-4379-9fb4-7ea1e678e541",
+		"name": "rems-and-katsu-test",
 		"description": "A collection of requests testing the REMS add-entitlements webhook, which is ingested by the Consents service to initialize ProjectConsents.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "Create resources in Katsu",
+			"name": "Create data in Katsu",
 			"item": [
 				{
 					"name": "Authorized Resources",
@@ -1290,7 +1290,7 @@
 			"name": "Create users in REMS",
 			"item": [
 				{
-					"name": "Add applying user to REMS",
+					"name": "Register researcher in REMS",
 					"event": [
 						{
 							"listen": "test",
@@ -1362,10 +1362,10 @@
 			]
 		},
 		{
-			"name": "Create catalogue item for resource in REMS",
+			"name": "Catalogue a cohort in REMS",
 			"item": [
 				{
-					"name": "Add organization to REMS",
+					"name": "DAC member adds organization to REMS",
 					"event": [
 						{
 							"listen": "test",
@@ -1434,7 +1434,7 @@
 					"response": []
 				},
 				{
-					"name": "Add form to REMS",
+					"name": "DAC member adds form",
 					"event": [
 						{
 							"listen": "test",
@@ -1506,7 +1506,7 @@
 					"response": []
 				},
 				{
-					"name": "Add license to REMS",
+					"name": "DAC member adds license",
 					"event": [
 						{
 							"listen": "test",
@@ -1578,7 +1578,7 @@
 					"response": []
 				},
 				{
-					"name": "Add resource to REMS",
+					"name": "DAC member adds resource",
 					"event": [
 						{
 							"listen": "test",
@@ -1650,7 +1650,7 @@
 					"response": []
 				},
 				{
-					"name": "Add workflow to REMS",
+					"name": "DAC member adds workflow",
 					"event": [
 						{
 							"listen": "test",
@@ -1722,7 +1722,7 @@
 					"response": []
 				},
 				{
-					"name": "Add catalogue item to REMS",
+					"name": "DAC member catalogues a cohort in REMS",
 					"event": [
 						{
 							"listen": "test",
@@ -1796,10 +1796,10 @@
 			]
 		},
 		{
-			"name": "Apply to catalogue item in REMS",
+			"name": "Use REMS to apply for access to cohort",
 			"item": [
 				{
-					"name": "Apply to catalog-item in REMS",
+					"name": "Researcher applies for access to the cohort",
 					"event": [
 						{
 							"listen": "test",
@@ -1871,7 +1871,7 @@
 					"response": []
 				},
 				{
-					"name": "Check new REMS application",
+					"name": "Let's check out their REMS application",
 					"event": [
 						{
 							"listen": "test",
@@ -1938,7 +1938,7 @@
 					"response": []
 				},
 				{
-					"name": "Accept licenses in REMS",
+					"name": "Researcher accepts licenses",
 					"event": [
 						{
 							"listen": "test",
@@ -2007,7 +2007,7 @@
 					"response": []
 				},
 				{
-					"name": "Submit application in REMS",
+					"name": "Researcher submits application",
 					"event": [
 						{
 							"listen": "test",
@@ -2081,7 +2081,7 @@
 			"name": "Approve application in REMS",
 			"item": [
 				{
-					"name": "Approve application in REMS",
+					"name": "DAC approves researcher's application",
 					"event": [
 						{
 							"listen": "test",
@@ -2175,7 +2175,7 @@
 			"name": "Applicant is authorized to get resource from Katsu",
 			"item": [
 				{
-					"name": "Fetch applicant's permissions from REMS",
+					"name": "Let's fetch and store researcher's permissions JWT",
 					"event": [
 						{
 							"listen": "test",
@@ -2238,7 +2238,7 @@
 					"response": []
 				},
 				{
-					"name": "Get individuals from Katsu as the applicant",
+					"name": "Permitted researcher queries Katsu for individuals",
 					"event": [
 						{
 							"listen": "test",
@@ -2393,7 +2393,7 @@
 					]
 				},
 				{
-					"name": "Get phenopackets from Katsu as the applicant",
+					"name": "Permitted researcher queries Katsu for phenopackets",
 					"event": [
 						{
 							"listen": "test",
@@ -2573,7 +2573,7 @@
 			"name": "Applicant's access to resource is revoked in REMS",
 			"item": [
 				{
-					"name": "Revoke applicant's access to resource in REMS",
+					"name": "DAC revokes researcher's access",
 					"event": [
 						{
 							"listen": "test",
@@ -2668,7 +2668,7 @@
 			"name": "Applicant is not authorized to get resource from Katsu",
 			"item": [
 				{
-					"name": "Fetch applicant's permissions from REMS",
+					"name": "Let's fetch and store researcher's permissions JWT",
 					"event": [
 						{
 							"listen": "test",
@@ -2731,7 +2731,7 @@
 					"response": []
 				},
 				{
-					"name": "Get individuals from Katsu as the applicant",
+					"name": "Unpermitted researcher queries Katsu for individuals",
 					"event": [
 						{
 							"listen": "test",
@@ -2879,7 +2879,7 @@
 					]
 				},
 				{
-					"name": "Get phenopackets from Katsu as the applicant",
+					"name": "Unpermitted researcher queries Katsu for phenopackets",
 					"event": [
 						{
 							"listen": "test",
