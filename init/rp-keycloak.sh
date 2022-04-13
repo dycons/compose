@@ -81,18 +81,18 @@ _set_secret () {
             echo 'WARNING: .env file does not contain the ${REMS_CLIENT_SECRET} reference!'
             echo 'Unable to substitute the value of ${REMS_CLIENT_SECRET} into the .env file.'
             echo 'Please do so manually, or rerun this script after adding the reference to the .env file.'
-            echo 'ex. To reset the .env file to its default state, run either of the following commands:'
-            echo 'When not sourcing this script:  cp .default.env .env && ./init/rp-keycloak.sh'
-            echo 'When sourcing this script:      cp .default.env .env && . ./init/rp-keycloak.sh'
+            echo 'note: To reset the .env file to its default state, run either of the following commands:'
+            echo '      When not sourcing this script:  cp .default.env .env && ./init/rp-keycloak.sh'
+            echo '      When sourcing this script:      cp .default.env .env && . ./init/rp-keycloak.sh'
             return 1
             ;;
         *)
             echo 'WARNING: error when checking for presence of ${REMS_CLIENT_SECRET} reference in the .env file!'
             echo 'Unable to substitute the value of ${REMS_CLIENT_SECRET} into the .env file.'
-            echo 'Please do so manually, or rerun this script after adding the reference to the .env file.'
-            echo 'ex. To reset the .env file to its default state, run either of the following commands:'
-            echo 'When not sourcing this script:  cp .default.env .env && ./init/rp-keycloak.sh'
-            echo 'When sourcing this script:      cp .default.env .env && . ./init/rp-keycloak.sh'
+            echo 'It may already have a value populated.'
+            echo 'note: To reset the .env file to its default state, run the following command:'
+            echo '      When not sourcing this script:  cp .default.env .env && ./init/rp-keycloak.sh'
+            echo '      When sourcing this script:      cp .default.env .env && . ./init/rp-keycloak.sh'
             return 2
             ;;
     esac
