@@ -47,16 +47,16 @@ _set_api_key () {
             echo 'WARNING: .env file does not contain the ${REMS_API_KEY} reference!'
             echo 'Unable to substitute the value of ${REMS_API_KEY} into the .env file.'
             echo 'Please do so manually, or rerun this script after adding the reference to the .env file.'
-            echo 'note: To reset the .env file to its default state, run the following command:'
-            echo '      cp .default.env .env'
+            echo 'ex. To reset the .env file to its default state, run the following command:'
+            echo 'cp .default.env .env'
             return 1
             ;;
         *)
             echo 'WARNING: error when checking for presence of ${REMS_API_KEY} reference in the .env file!'
             echo 'Unable to substitute the value of ${REMS_API_KEY} into the .env file.'
-            echo 'It may already have a value populated.'
-            echo 'note: To reset the .env file to its default state, run the following command:'
-            echo '      cp .default.env .env'
+            echo 'Please do so manually, or rerun this script after adding the reference to the .env file.'
+            echo 'ex. To reset the .env file to its default state, run the following command:'
+            echo 'cp .default.env .env'
             return 2
             ;;
     esac
