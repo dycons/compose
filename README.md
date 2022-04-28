@@ -1,6 +1,10 @@
 # compose
 DyCons server configuration and deployment
 
+All DyCons software is archived and deprecated, left for reference only.
+
+See `dycons/design` for additional context on this repository.
+
 ## Table of Contents
 - [compose](#compose)
   - [Table of Contents](#table-of-contents)
